@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-label="Iced signature drink in a Beanery cup on a wooden board">
+<defs>
+  <linearGradient id="hBrew" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#8B5D34"/><stop offset=".3" stop-color="#6B4020"/><stop offset="1" stop-color="#3C2110"/>
+  </linearGradient>
+  <linearGradient id="hMilk" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F6E9D4"/><stop offset="1" stop-color="#D9C09B"/>
+  </linearGradient>
+  <linearGradient id="hWood" x1=".1" y1="0" x2=".9" y2="1">
+    <stop offset="0" stop-color="#9C6C42"/><stop offset=".55" stop-color="#7B5330"/><stop offset="1" stop-color="#573921"/>
+  </linearGradient>
+  <linearGradient id="hGlass" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".16" stop-color="#fff" stop-opacity=".05"/>
+    <stop offset=".74" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".34"/>
+  </linearGradient>
+  <linearGradient id="hLid" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#FFFFFF" stop-opacity=".62"/><stop offset="1" stop-color="#DCE4DA" stop-opacity=".5"/>
+  </linearGradient>
+  <clipPath id="hCup"><path d="M128 95H292l-22 227a16 16 0 0 1-16 14H166a16 16 0 0 1-16-14Z"/></clipPath>
+</defs>
+
+<!-- board -->
+<g>
+  <path d="M56 328c0-28 62-40 154-40s154 12 154 40-62 44-154 44S56 356 56 328Z" fill="#4B3120" opacity=".35"/>
+  <path d="M56 320c0-28 62-40 154-40s154 12 154 40-62 42-154 42S56 348 56 320Z" fill="url(#hWood)"/>
+  <path d="M96 306c40-9 188-9 228 0" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="3" stroke-linecap="round"/>
+  <path d="M84 330c48 10 204 10 252 0" fill="none" stroke="#3A2413" stroke-opacity=".28" stroke-width="2.5" stroke-linecap="round"/>
+</g>
+
+<!-- cup shadow on the board -->
+<ellipse cx="210" cy="336" rx="66" ry="12" fill="#3A2413" opacity=".3"/>
+
+<!-- liquid -->
+<g clip-path="url(#hCup)">
+  <rect x="120" y="88" width="184" height="264" fill="url(#hBrew)"/>
+  <path d="M120 150c26 12 44-8 66-4s34 16 58 12 30-16 60-10v-64H120Z" fill="url(#hMilk)"/>
+  <path d="M120 158c30 10 46-6 68-2s32 16 56 12 32-14 60-8v22c-30-6-36 8-60 12s-34-8-56-12-38 14-68 2Z" fill="#fff" opacity=".18"/>
+  <!-- ice -->
+  <g fill="#fff" opacity=".26">
+    <rect x="146" y="112" width="40" height="34" rx="9" transform="rotate(-12 166 129)"/>
+    <rect x="214" y="104" width="42" height="34" rx="9" transform="rotate(9 235 121)"/>
+    <rect x="182" y="150" width="40" height="32" rx="9" transform="rotate(-6 202 166)"/>
+    <rect x="234" y="152" width="36" height="30" rx="8" transform="rotate(16 252 167)"/>
+  </g>
+  <rect x="120" y="88" width="184" height="264" fill="url(#hGlass)"/>
+</g>
+
+<!-- cup outline + monogram -->
+<path d="M128 95H292l-22 227a16 16 0 0 1-16 14H166a16 16 0 0 1-16-14Z" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3"/>
+<g stroke="#fff" stroke-opacity=".72" fill="none" transform="translate(186 208) scale(1.15)">
+  <path d="M11 6h11c5 0 8.5 3 8.5 7.4 0 3.3-1.9 5.6-4.6 6.6 3.4.8 5.8 3.4 5.8 7.2 0 5.1-4 8.4-9.9 8.4H11V6Z" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M20 40c0-5 2.6-8.4 7.2-9.6M20 40c0-4.2-2.2-7-6-8.2" stroke-width="2" stroke-linecap="round"/>
+</g>
+
+<!-- dome lid -->
+<path d="M132 84c0-40 156-40 156 0" fill="url(#hLid)"/>
+<path d="M132 84c0-40 156-40 156 0" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>
+<rect x="118" y="80" width="184" height="20" rx="9" fill="#F3EFE6" opacity=".9"/>
+<rect x="118" y="80" width="184" height="20" rx="9" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="2"/>
+<path d="M150 88h120" stroke="#C9C2B4" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+
+<!-- leaf -->
+<g transform="translate(58 240) rotate(-16)">
+  <path d="M0 34C0 12 22-4 62-6 58 30 36 46 8 44Z" fill="#5D8250"/>
+  <path d="M4 40C18 26 40 12 60-4" fill="none" stroke="#F1EADC" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>
+</g>
+
+<!-- beans -->
+<g fill="#4A2C15">
+  <g transform="translate(300 322) rotate(24)">
+    <ellipse rx="15" ry="10.5"/><path d="M-13 3C-6-4 6-7 13-3" fill="none" stroke="#2A1709" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(334 336) rotate(-14)">
+    <ellipse rx="14" ry="10"/><path d="M-12 3C-5-4 5-6 12-3" fill="none" stroke="#2A1709" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(96 342) rotate(-32)">
+    <ellipse rx="14" ry="10"/><path d="M-12 3C-5-4 5-6 12-3" fill="none" stroke="#2A1709" stroke-width="1.8" stroke-linecap="round"/>
+  </g>
+</g>
+</svg>

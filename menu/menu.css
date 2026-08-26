@@ -1,0 +1,1491 @@
+/* ==========================================================================
+   BEANERY — QR menu
+   Built phone-first: this page is opened at a table, one-handed, often in
+   low light. Density is high (60+ lines), so the paper metaphor survives only
+   as a material cue — stock colour, gold rules, leader dots. No heavy frames.
+   ========================================================================== */
+
+:root {
+  --bg: #F7F1DC;
+  --card: #FEFAE0;
+  --line: rgba(40, 54, 24, .14);
+  --dotline: rgba(40, 54, 24, .3);
+  --ink: #283618;
+  --ink-soft: #5B6B3E;
+  --ink-faint: #94997A;
+
+  --green: #606C38;
+  --green-deep: #283618;
+  --green-ink: #46531F;
+  --gold: #BC6C25;
+  --gold-soft: #DDA15E;
+  --frame: #1D2712;
+
+  --blob-a: rgba(96, 108, 56, .14);
+  --blob-b: rgba(188, 108, 37, .12);
+
+  --display: "Playfair Display", Georgia, serif;
+  --script: "Dancing Script", cursive;
+  --board: "Oswald", "Arial Narrow", sans-serif;
+  --ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --maxw: 720px;
+  --pad: clamp(1.1rem, 5vw, 1.75rem);
+  --headH: 58px;
+  /* sticky category bar height */
+
+  /* the shop's marble — same crop and tone as the landing page */
+  --marble: url("../brand-info/vibe-2.jpeg");
+  --marble-crop: 42% 60%;
+  --marble-zoom: 300% auto;
+}
+
+/* dark: a café at night, phone at full brightness in someone's face */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171F0F;
+    --card: #212C16;
+    --line: rgba(245, 239, 217, .13);
+    --dotline: rgba(245, 239, 217, .26);
+    --ink: #F5EFD9;
+    --ink-soft: #C4C09E;
+    --ink-faint: #8B8A6C;
+    --green: #8FA25E;
+    --green-deep: #67793C;
+    --green-ink: #E4E8CE;
+    --gold: #E2A458;
+    --gold-soft: #EFC488;
+    --frame: #10150A;
+    --blob-a: rgba(143, 162, 94, .16);
+    --blob-b: rgba(226, 164, 88, .12);
+  }
+
+  /* a full-brightness green header is glare in a dim room — sink it */
+  .mhead {
+    background:
+      radial-gradient(130% 95% at 6% -14%, rgba(251, 247, 239, .08) 0%, transparent 52%),
+      linear-gradient(168deg, #202B13 0%, #2A3A19 100%);
+  }
+
+  .mhead__title p {
+    color: rgba(245, 239, 217, .7);
+  }
+
+  .sec--feature {
+    background: linear-gradient(158deg, #2A3A19 0%, #212C14 100%);
+  }
+
+  .sec--feature .sec__head h2,
+  .list--flavours .item__name {
+    color: #F5EFD9;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -.015em;
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* soft brand blobs bleeding under the whole page, echoing the shop's hero,
+   plus a faint fixed grain so the cream reads as stock, not a flat fill */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, var(--blob-a), rgba(88, 123, 76, 0) 70%) -14% -6%/50vmin 50vmin no-repeat,
+    radial-gradient(closest-side, var(--blob-b), rgba(196, 149, 42, 0) 70%) 108% 8%/38vmin 38vmin no-repeat,
+    radial-gradient(closest-side, var(--blob-a), rgba(88, 123, 76, 0) 70%) 96% 78%/34vmin 34vmin no-repeat;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: .035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:where(a, button, input):focus-visible {
+  outline: 2.5px solid var(--green);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.mhead {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  /* the radial is the TOP layer, so it must fade to transparent — ending it
+     on an opaque colour paints a flat panel over the linear beneath and the
+     green never shows. The linear underneath carries green-deep -> --card. */
+  background:
+    radial-gradient(130% 95% at 6% -14%, rgba(251, 247, 239, .12) 0%, transparent 52%),
+    linear-gradient(168deg, var(--green-deep) 0%, var(--card) 78%);
+  color: #FBF7EF;
+  /* longhand, not shorthand: mixing var(--pad) with literal values in one
+     padding shorthand triggers a Chrome layout bug that overflows the page
+     horizontally — see the width rules on html/body for the belt-and-braces */
+  padding-top: calc(.6rem + env(safe-area-inset-top));
+  padding-right: var(--pad);
+  padding-bottom: 1.9rem;
+  padding-left: var(--pad);
+  border-radius: 0 0 34px 34px;
+}
+
+/* with the hero and the tile grid gone, this header is the whole opening —
+   give it room to breathe once the screen can afford it */
+@media (min-width:560px) {
+  .mhead {
+    padding-bottom: 2.4rem;
+  }
+
+  .mhead__title {
+    margin-top: 2.1rem;
+    max-width: min(60%, 42ch);
+  }
+}
+
+.mhead::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* the photo is a double-tap toggle, so this layer has to accept taps. It
+   sits at z-index 0, under the bar / title / search (all z-index 1), so it
+   only ever catches taps that land on the photo itself.
+   touch-action:manipulation suppresses the browser's double-tap-to-zoom,
+   which would otherwise eat the second tap on a phone. */
+.mhead__deco {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the cup photo lives behind the text, confined to the right side and
+   feathered in with a mask so it reads as part of the green rather than
+   a pasted rectangle — a tint on top pulls its colour into the brand green */
+.mhead__photo-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, transparent 36%, rgba(0, 0, 0, .5) 54%, #000 74%);
+  mask-image: linear-gradient(100deg, transparent 0%, transparent 36%, rgba(0, 0, 0, .5) 54%, #000 74%);
+}
+
+.mhead__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 76% 40%;
+  transition: opacity .22s ease;
+}
+
+/* the frappé shot is 3:2 against the cup shot's 1.9:1, so a wide desktop
+   header crops it hard vertically. anchoring high keeps the cream and the
+   chocolate splash in frame instead of showing a mid-band of bare cup. */
+.mhead__photo--alt {
+  object-position: 58% 28%;
+}
+
+.mhead__photo-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, var(--green-deep) 0%, var(--green-deep) 30%, transparent 62%),
+    radial-gradient(ellipse 90% 70% at 30% 105%, rgba(14, 18, 7, .6), transparent 62%);
+  mix-blend-mode: multiply;
+  opacity: .72;
+}
+
+.mhead__bar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  min-height: 48px;
+  animation: mheadRise .6s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.mhead__back {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(251, 247, 239, .16);
+  color: inherit;
+  text-decoration: none;
+  transition: background .2s ease, transform .2s ease;
+}
+
+.mhead__back:hover {
+  background: rgba(251, 247, 239, .26);
+  transform: translateX(-2px);
+}
+
+.mhead__back svg {
+  width: 19px;
+  height: 19px;
+}
+
+.mhead__brand {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  margin-right: auto;
+}
+
+/* 20:25 matches the monogram's own 50.7:63.3 ratio — the old 22:25 box
+   letterboxed it and shaved a pixel off each side */
+.mhead__b {
+  width: 20px;
+  height: 25px;
+  color: var(--gold-soft);
+}
+
+.mhead__brand p {
+  font-family: var(--board);
+  font-weight: 500;
+  letter-spacing: .2em;
+  font-size: .82rem;
+  line-height: 1.25;
+}
+
+.mhead__brand span {
+  display: block;
+  font-size: .5rem;
+  letter-spacing: .3em;
+  color: rgba(251, 247, 239, .65);
+}
+
+.mhead__open {
+  font-family: var(--board);
+  font-size: .62rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  background: rgba(251, 247, 239, .18);
+  padding: .4rem .7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* the photo mask fades in across 36%–74%, so the text column stops short of
+   it — otherwise the subtitle's tail lands on the bright cup and the cream
+   type loses all contrast against it */
+.mhead__title {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.5rem;
+  max-width: 58%;
+}
+
+.mhead__kicker {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--board);
+  font-weight: 600;
+  font-size: .68rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: .6rem;
+  animation: mheadRise .6s cubic-bezier(.22, 1, .36, 1) .08s both;
+}
+
+.mhead__kicker::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--gold-soft);
+  border-radius: 2px;
+}
+
+.mhead__title h1 {
+  font-size: clamp(2.6rem, 10.5vw, 3.6rem);
+  animation: mheadRise .7s cubic-bezier(.22, 1, .36, 1) .14s both;
+}
+
+.mhead__title p {
+  color: rgba(251, 247, 239, .8);
+  font-size: .92rem;
+  margin-top: .35rem;
+  animation: mheadRise .7s cubic-bezier(.22, 1, .36, 1) .2s both;
+}
+
+@keyframes mheadRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* search */
+.search {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  margin-top: 1.3rem;
+  background: var(--card);
+  border-radius: 999px;
+  padding: .2rem;
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, .65), 0 1px 0 rgba(255, 255, 255, .5) inset;
+  transition: box-shadow .25s ease, transform .25s ease;
+  animation: mheadRise .7s cubic-bezier(.22, 1, .36, 1) .28s both;
+}
+
+.search:focus-within {
+  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, .65), 0 0 0 3px rgba(232, 206, 134, .3);
+  transform: translateY(-1px);
+}
+
+.search__ico {
+  width: 19px;
+  height: 19px;
+  margin: 0 .3rem 0 .9rem;
+  color: var(--ink-faint);
+  flex: 0 0 auto;
+}
+
+.search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 16px;
+  /* 16px stops iOS zoom on focus */
+  padding: .85rem .4rem;
+}
+
+.search input::placeholder {
+  color: var(--ink-faint);
+}
+
+.search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.search__clear {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  margin-right: .35rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(88, 123, 76, .16);
+  color: var(--green);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.search__clear svg {
+  width: 15px;
+  height: 15px;
+}
+
+.search__clear[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   STICKY CATEGORY NAV
+   ========================================================================== */
+.cats {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.cats__track {
+  display: flex;
+  gap: .4rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-top: .7rem;
+  padding-bottom: .7rem;
+  padding-left: var(--pad);
+  padding-right: var(--pad);
+  max-width: var(--maxw);
+  margin: 0 auto;
+  scroll-snap-type: x proximity;
+  /* this row is now the only navigation on the page, so it has to *look*
+     scrollable — the pills dissolve into the gutters instead of being
+     guillotined at the viewport edge, which reads as "there is more here" */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--pad), #000 calc(100% - var(--pad)), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 var(--pad), #000 calc(100% - var(--pad)), transparent 100%);
+}
+
+.cats__track::-webkit-scrollbar {
+  display: none;
+}
+
+.cat {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: .5rem .9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  transition: background .32s cubic-bezier(.22, 1, .36, 1), color .32s cubic-bezier(.22, 1, .36, 1),
+    border-color .32s ease, box-shadow .32s ease, transform .18s ease;
+}
+
+.cat:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.cat:active {
+  transform: scale(.96);
+}
+
+.cat.is-on {
+  background: var(--green);
+  border-color: var(--green);
+  color: #FBF7EF;
+  box-shadow: 0 8px 18px -10px rgba(44, 66, 39, .6);
+}
+
+/* ==========================================================================
+   PILL BUTTON (shared) — echoes the shop's own "Get directions" CTA
+   ========================================================================== */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  background: var(--green);
+  color: #FBF7EF;
+  font-family: var(--board);
+  font-weight: 600;
+  font-size: .76rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .4rem .4rem .4rem 1.15rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.btn-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px -14px rgba(0, 0, 0, .55);
+}
+
+.btn-pill__arrow {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(251, 247, 239, .2);
+  display: grid;
+  place-items: center;
+}
+
+.btn-pill__arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-pill--gold {
+  background: var(--gold);
+  color: #2A1B0A;
+}
+
+.btn-pill--gold .btn-pill__arrow {
+  background: rgba(42, 27, 10, .18);
+}
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+main {
+  position: relative;
+  z-index: 1;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-top: 2.1rem;
+  padding-right: var(--pad);
+  padding-bottom: 2rem;
+  padding-left: var(--pad);
+}
+
+.sec {
+  position: relative;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 1.5rem 1.3rem 1.2rem;
+  margin-bottom: 1rem;
+  scroll-margin-top: calc(var(--headH) + 12px);
+  box-shadow: 0 1px 0 rgba(38, 36, 31, .05);
+  transition: box-shadow .25s ease, transform .25s ease, border-color .25s ease;
+}
+
+/* the faintest paper grain — a material cue, not a texture you notice */
+.sec::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .025;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .sec:hover {
+    border-color: rgba(96, 108, 56, .28);
+    box-shadow: 0 14px 28px -22px rgba(40, 54, 24, .35);
+  }
+}
+
+.sec__head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.sec__icon {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(155deg, var(--green) 0%, var(--green-deep) 100%);
+  color: var(--card);
+  box-shadow: 0 6px 14px -8px rgba(40, 54, 24, .5), inset 0 1px 0 rgba(255, 255, 255, .2);
+}
+
+.sec__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sec__icon--gold {
+  background: linear-gradient(155deg, var(--gold-soft) 0%, var(--gold) 100%);
+  box-shadow: 0 6px 14px -8px rgba(120, 80, 20, .45), inset 0 1px 0 rgba(255, 255, 255, .28);
+}
+
+.sec__head h2 {
+  font-family: var(--board);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1.16rem;
+  letter-spacing: .02em;
+  position: relative;
+  padding-bottom: .4rem;
+}
+
+.sec__head h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 32px;
+  height: 2.5px;
+  background: var(--gold);
+}
+
+.sec__count {
+  margin-left: auto;
+  font-family: var(--board);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .15rem .5rem;
+}
+
+.sec__note {
+  position: relative;
+  z-index: 1;
+  font-size: .8rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: .5rem;
+}
+
+.sec__note--ar {
+  font-style: normal;
+  font-size: .86rem;
+}
+
+/* ==========================================================================
+   PRODUCT CARDS — a horizontally-scrolling row per section, echoing a
+   boutique catalogue rather than a paper price list. Native scroll-snap,
+   no JS required for touch; a pair of arrow buttons appear for mouse users.
+   ========================================================================== */
+.cardrow {
+  position: relative;
+  z-index: 1;
+  margin: 1rem -1.3rem 0;
+}
+
+.cardrow__track {
+  display: flex;
+  gap: .9rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: .2rem 1.3rem .5rem;
+}
+
+.cardrow__track::-webkit-scrollbar {
+  display: none;
+}
+
+/* (an edge-fade overlay lived here — dropped it: it was corrupting the
+   first card's text in this environment's renderer, and the always-on
+   arrows below already say "there's more" without it) */
+
+/* always on — on a touch phone there is no hover state to reveal them with,
+   and a bare card row gives no hint that it scrolls, so the arrows are the
+   only affordance a thumb gets. Sized to a real touch target (40px). */
+.cardrow__arrow {
+  display: flex;
+  position: absolute;
+  top: 80px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--green-deep);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 20px -12px rgba(40, 54, 24, .5);
+  transition: background .2s ease, color .2s ease, transform .2s ease, opacity .2s ease;
+}
+
+.cardrow__arrow svg {
+  width: 17px;
+  height: 17px;
+}
+
+.cardrow__arrow--prev {
+  left: -4px;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+.cardrow__arrow--next {
+  right: -4px;
+  transform: translateY(-50%);
+}
+
+.cardrow__arrow:hover {
+  background: var(--green);
+  color: var(--card);
+}
+
+.cardrow__arrow--prev:hover {
+  transform: translateY(-50%) scaleX(-1) scale(1.08);
+}
+
+.cardrow__arrow--next:hover {
+  transform: translateY(-50%) scale(1.08);
+}
+
+.cardrow__arrow:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+.cardrow__arrow--prev:active {
+  transform: translateY(-50%) scaleX(-1) scale(.92);
+}
+
+.cardrow__arrow[disabled] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sec--feature .cardrow__arrow {
+  top: 86px;
+}
+
+.pcard {
+  position: relative;
+  flex: 0 0 auto;
+  width: 128px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* the photo tiles are gone, so the cutouts float directly on the stock.
+   a short hairline sitting in the flex gap does the separating instead —
+   deliberately shorter than the card so it reads as a divider, not a border */
+.pcard+.pcard::before {
+  content: "";
+  position: absolute;
+  left: calc(-.45rem - .5px);
+  top: 34px;
+  width: 1px;
+  height: 60px;
+  background: var(--line);
+  pointer-events: none;
+}
+
+/* card rise animation removed with the scroll reveal — cards render in place */
+
+.pcard__photo {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  background: none;
+  display: grid;
+  place-items: center;
+  transition: transform .32s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* no tile to contain them any more, so the cutouts get the extra room the
+   frame used to take, and the drop-shadow does the grounding on its own */
+.pcard__photo img {
+  width: 94%;
+  height: 94%;
+  object-fit: contain;
+  filter: drop-shadow(0 9px 11px rgba(40, 54, 24, .22));
+  transition: transform .32s cubic-bezier(.22, 1, .36, 1), filter .32s ease;
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .pcard:hover .pcard__photo {
+    transform: translateY(-5px);
+  }
+
+  .pcard:hover .pcard__photo img {
+    transform: scale(1.05);
+    filter: drop-shadow(0 14px 16px rgba(40, 54, 24, .3));
+  }
+}
+
+.pcard__name {
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: .84rem;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.pcard__price {
+  font-family: var(--board);
+  font-weight: 500;
+  font-size: .8rem;
+  color: var(--gold);
+  letter-spacing: .01em;
+}
+
+.pcard__price span {
+  font-size: .68rem;
+  color: var(--ink-faint);
+  font-weight: 400;
+  margin-left: .15rem;
+}
+
+.pcard__desc {
+  font-family: var(--ui);
+  font-size: .72rem;
+  line-height: 1.4;
+  color: rgba(254, 250, 224, .75);
+}
+
+.pcard__photo--empty {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px dashed var(--line);
+}
+
+.sec--feature .pcard__name {
+  color: #FEFAE0;
+}
+
+.sec--feature .pcard {
+  width: 140px;
+}
+
+.sec--feature .pcard__photo {
+  width: 140px;
+  height: 140px;
+}
+
+/* the dark feature panel needs a light hairline, and a taller photo box
+   means the divider sits a little lower */
+.sec--feature .pcard+.pcard::before {
+  top: 40px;
+  height: 66px;
+  background: rgba(254, 250, 224, .2);
+}
+
+.list {
+  position: relative;
+  z-index: 1;
+  margin-top: .9rem;
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: .45rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 9px;
+}
+
+.item+.item {
+  border-top: 1px solid var(--line);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .item {
+    transition: background-color .2s ease, padding-left .2s ease;
+  }
+
+  .item:hover {
+    background: rgba(96, 108, 56, .08);
+    padding-left: .45rem;
+  }
+
+  .sec--feature .item:hover {
+    background: rgba(254, 250, 224, .09);
+  }
+}
+
+.item__img {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: var(--line);
+  box-shadow: inset 0 0 0 1px rgba(38, 36, 31, .08);
+}
+
+.item__img--empty {
+  background: transparent;
+  box-shadow: none;
+}
+
+.list--pics .item {
+  align-items: center;
+  gap: .7rem;
+}
+
+.item__name {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.item__dots {
+  flex: 1 1 auto;
+  min-width: 14px;
+  height: .5em;
+  border-bottom: 1.5px dotted var(--dotline);
+}
+
+.item__price {
+  flex: 0 0 auto;
+  font-family: var(--board);
+  font-weight: 500;
+  font-size: 1.02rem;
+  color: var(--green-ink);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.new {
+  display: inline-block;
+  font-family: var(--board);
+  font-size: .55rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  background: var(--gold);
+  color: #FEFAE0;
+  padding: .1rem .38rem;
+  border-radius: 4px;
+  margin-left: .35rem;
+}
+
+/* signature block gets the only visual promotion on the page */
+.sec--feature {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(158deg, var(--green) 0%, var(--green-deep) 100%);
+  color: #FBF7EF;
+  box-shadow: 0 14px 30px -20px rgba(44, 66, 39, .9);
+}
+
+/* the shop's marble under the green — the signature drink on a stone coaster.
+   soft-light keeps luminance (and so the text contrast) essentially intact. */
+.sec--feature::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* the shop's marble layers on top when present; the gradients underneath
+     stand alone as a stone-like sheen if that asset isn't available */
+  background-image:
+    var(--marble),
+    radial-gradient(120% 90% at 15% 0%, rgba(255, 255, 255, .5), transparent 55%),
+    radial-gradient(90% 70% at 100% 100%, rgba(0, 0, 0, .35), transparent 60%),
+    repeating-linear-gradient(118deg, rgba(255, 255, 255, .05) 0 2px, transparent 2px 14px);
+  background-size: var(--marble-zoom), cover, cover, auto;
+  background-position: var(--marble-crop), center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  /* darkened to mid-grey so soft-light barely moves the green's luminance —
+     the veins still read, the white text keeps its contrast ratio */
+  filter: saturate(.12) contrast(1.4) brightness(.9);
+  mix-blend-mode: soft-light;
+  opacity: .85;
+}
+
+.sec--feature__mark {
+  position: absolute;
+  right: -8px;
+  bottom: -12px;
+  width: 132px;
+  height: 112px;
+  color: #FBF7EF;
+  opacity: .07;
+  pointer-events: none;
+}
+
+.sec--feature .sec__head h2 {
+  color: #FBF7EF;
+}
+
+.sec--feature .sec__count {
+  color: rgba(251, 247, 239, .75);
+  border-color: rgba(251, 247, 239, .3);
+}
+
+.sec--feature .sec__note {
+  color: rgba(251, 247, 239, .82);
+}
+
+.feature__price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .5rem;
+  margin-top: .9rem;
+  background: rgba(251, 247, 239, .14);
+  border-radius: 999px;
+  padding: .4rem 1rem;
+  font-family: var(--board);
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+.feature__price b {
+  font-size: 1.1rem;
+  letter-spacing: .02em;
+  color: var(--gold-soft);
+}
+
+.list--flavours .item {
+  align-items: flex-start;
+  gap: .75rem;
+}
+
+.list--flavours .item+.item {
+  border-top-color: rgba(251, 247, 239, .18);
+}
+
+.swatch {
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  margin-top: .35rem;
+  border-radius: 50%;
+  background: var(--dot);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, .3), 0 0 0 2px rgba(251, 247, 239, .22);
+}
+
+.list--flavours .item__name {
+  display: block;
+  font-weight: 600;
+}
+
+.list--flavours em {
+  display: block;
+  font-style: normal;
+  font-weight: 400;
+  font-size: .8rem;
+  color: rgba(251, 247, 239, .85);
+  margin-top: .1rem;
+}
+
+.sec--addons .item__price {
+  color: var(--ink-soft);
+}
+
+/* search empty state */
+.noresults {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--ink-soft);
+}
+
+.noresults button {
+  display: block;
+  margin: .6rem auto 0;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   FOOTER + BACK TO TOP
+   ========================================================================== */
+.mfoot {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: var(--frame);
+  color: #CFC9BC;
+  text-align: center;
+  border-radius: 30px 30px 0 0;
+  padding-top: 2.4rem;
+  padding-right: var(--pad);
+  padding-bottom: calc(2.8rem + env(safe-area-inset-bottom));
+  padding-left: var(--pad);
+}
+
+.mfoot__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.9rem;
+}
+
+.mfoot__script {
+  font-family: var(--script);
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: var(--gold-soft);
+}
+
+.mfoot__sub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  font-family: var(--board);
+  font-size: .6rem;
+  letter-spacing: .34em;
+  margin-top: .3rem;
+}
+
+.mfoot__sub::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.mfoot__bean {
+  width: 32px;
+  height: 27px;
+  color: var(--gold-soft);
+  opacity: .85;
+  margin: 0 auto .9rem;
+  display: block;
+}
+
+.mfoot__aside {
+  max-width: 38ch;
+}
+
+.mfoot__note {
+  font-size: .76rem;
+  color: #8D877B;
+}
+
+.mfoot__link {
+  display: inline-block;
+  margin-top: 1.3rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: #CFC9BC;
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--gold);
+  padding-bottom: .15rem;
+}
+
+.mfoot__credit {
+  position: relative;
+  z-index: 1;
+  margin-top: 2.1rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid rgba(207, 201, 188, .14);
+  font-family: var(--ui);
+  font-size: .72rem;
+  letter-spacing: .02em;
+  color: #78726A;
+}
+
+.mfoot__credit a {
+  color: var(--gold-soft);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(221, 161, 94, .4);
+  padding-bottom: .08rem;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.mfoot__credit a:hover {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.mfoot__drips {
+  position: absolute;
+  left: 1.4rem;
+  bottom: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  gap: .5rem;
+  opacity: .5;
+}
+
+.mfoot__drop {
+  width: 11px;
+  height: 13px;
+  color: var(--green);
+}
+
+.mfoot__drop--b {
+  width: 8px;
+  height: 10px;
+  opacity: .75;
+}
+
+@media (min-width:680px) {
+  .mfoot__inner {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: var(--maxw);
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .mfoot__brand .mfoot__sub {
+    justify-content: flex-start;
+  }
+
+  .mfoot__aside {
+    text-align: right;
+    max-width: 34ch;
+  }
+
+  .mfoot__bean {
+    margin: 0 0 .9rem auto;
+  }
+}
+
+.totop {
+  position: fixed;
+  right: 14px;
+  z-index: 30;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--green);
+  color: #FBF7EF;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, .7);
+}
+
+.totop svg {
+  width: 20px;
+  height: 20px;
+}
+
+.totop[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   wider screens: header/search widen and recentre; the menu itself stays
+   one column all the way up — see note below on why
+   ========================================================================== */
+@media (min-width:680px) {
+  :root {
+    --maxw: 960px;
+  }
+
+  /* header content lines up with the menu below it */
+  .mhead {
+    padding-bottom: 1.9rem;
+    border-radius: 0 0 40px 40px;
+  }
+
+  .mhead__bar,
+  .mhead__title,
+  .search {
+    max-width: var(--maxw);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* line the search box up with the left edge of the centred header block */
+  .search {
+    max-width: 520px;
+    margin-left: max(0px, calc((100% - var(--maxw)) / 2));
+  }
+
+  .mhead__title h1 {
+    font-size: 3.4rem;
+  }
+
+  /* One column even at desktop width, deliberately — CSS multi-column text
+     flow used to hold this, but it breaks card rows (a scrolling .cardrow
+     doesn't reflow the way multi-column expects) mid-card and produces
+     inconsistent gaps around spanning elements. A single centred column
+     inside the wider --maxw stays simple and never mis-breaks a section. */
+}
+
+/* ==========================================================================
+   state, motion, print
+   ========================================================================== */
+.is-hidden {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition-duration: .01ms !important;
+    animation: none !important;
+  }
+}
+
+/* staff print a clean copy for the counter */
+@media print {
+
+  .cats,
+  .search,
+  .totop,
+  .mhead__back,
+  .mfoot__link,
+  .mhead__deco,
+  .mfoot__drips,
+  .mfoot__bean,
+  body::before,
+  body::after,
+  .mfoot__credit {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .mhead {
+    background: none;
+    color: #000;
+    border-radius: 0;
+    padding: 0 0 1rem;
+  }
+
+  .mhead__brand span,
+  .mhead__title p {
+    color: #444;
+  }
+
+  .mhead__open {
+    background: none;
+    border: 1px solid #000;
+  }
+
+  main {
+    display: block;
+    max-width: none;
+    padding: 0;
+  }
+
+  .sec {
+    background: none;
+    box-shadow: none;
+    break-inside: avoid;
+    padding: 0 0 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .sec--feature {
+    color: #000;
+  }
+
+  .sec--feature .sec__head h2,
+  .pcard__desc,
+  .sec--feature .sec__note {
+    color: #000;
+  }
+
+  .sec--feature__mark {
+    display: none;
+  }
+
+  .cardrow {
+    margin: .6rem 0 0;
+  }
+
+  .cardrow__arrow {
+    display: none;
+  }
+
+  .cardrow__track {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .mfoot {
+    background: none;
+    color: #000;
+    border-radius: 0;
+  }
+
+  .mfoot__inner {
+    display: block;
+  }
+}
+
+@media (forced-colors:active) {
+
+  .sec,
+  .cat,
+  .search {
+    border: 1px solid;
+  }
+
+  .mhead__deco,
+  .mfoot__drips,
+  body::before,
+  body::after {
+    display: none;
+  }
+}

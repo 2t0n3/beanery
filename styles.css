@@ -1,0 +1,2062 @@
+/* ═══════════════════════════════════════════════════════════════════
+   BEANERY CAFE
+   Ankawa, Erbil
+
+   DIRECTION: green is a brand colour, not a subject.
+   It is used the way a brand uses its colour — as flat printed fields
+   you set type on. Structure is carried by colour blocking, photography
+   and type.
+
+   There IS an illustration layer (see the bottom of this file), but its
+   vocabulary is the drink — beans, steam, splashes, cups, swirls — plus
+   abstract blobs and squiggles. "Organic" describes the SHAPE LANGUAGE:
+   loose, wobbly, hand-drawn. It never means foliage. No leaves, no
+   branches, no plants anywhere in this stylesheet.
+
+   Every hex below was SAMPLED from a real asset, not invented:
+     --green      brand-info/color.jpeg   (the actual painted wall)
+     --olive      images/hero.png         (that photo's own lit ground)
+     --char       brand-info/vibe.png     (the real interior walls)
+     --gold       brand-info/menu-*.jpeg  (the printed board / signage)
+
+   Re-sample if the assets are replaced.
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ── Tokens ─────────────────────────────────────────────────────── */
+
+:root {
+  /* Paper */
+  --cream:      #F4EFE4;
+  --cream-2:    #EAE3D4;
+  --cream-3:    #DDD4C0;
+
+  /* Brand green, three steps.
+     #5FA366 is the true paint colour, but cream on it measures only
+     2.6:1 — a shape, not a word. So the paint is the BRIGHT step used
+     for accents, and large fields use the DEEP step (cream on deep
+     measures 6.3:1). The ink step is for green text on cream, 8.5:1. */
+  --green:      #5FA366;   /* bright — accents, rules, the live dot   */
+  --green-deep: #2F6136;   /* deep   — large grounds                  */
+  --green-ink:  #234B29;   /* ink    — small green text on cream      */
+  --green-dark: #1E4423;   /* deepest — footer                        */
+
+  /* The hero photograph's own ground. NOT the brand green — it is a
+     warmer, lit olive. Kept separate on purpose so the two are never
+     asked to blend. Re-sample from the photo's edge pixels if it
+     changes, or the hero seam will show a mismatched strip. */
+  --olive:      #46662F;
+
+  /* Charcoal — the real walls */
+  --char:       #1C1C1A;
+  --char-2:     #26261F;
+
+  /* Gold — from the signage. Passes on dark grounds only.
+     On cream, small text must use --gold-ink (5.3:1). */
+  --gold:       #D2A63A;   /* large text / rules on dark only          */
+  --gold-soft:  #EFCE7A;   /* small text on --green-deep — 4.8:1       */
+  --gold-ink:   #7A5C12;   /* small text on cream — 5.3:1              */
+
+  /* Muted body grey. The obvious pick (#7C7C70) measures 3.6:1 on cream
+     — it fails, and fails invisibly, because it still reads as "grey
+     text". Darkened until it passes.
+
+     Darkened AGAIN when the marble arrived. The texture multiplies the
+     cream, so the real background under this text is not #F4EFE4 but
+     cream x the darkest marble pixel (0.906) = rgb(221,217,207). The
+     previous #66665C measured 4.89:1 on flat cream but only 4.09:1 in
+     a vein — a fail that appears in some places on the page and not
+     others, which is the worst kind. #5E5E54 holds 4.6:1 in the
+     worst case. Re-measure if images/marble.* is regenerated darker. */
+  --muted:      #5E5E54;
+
+  /* Type */
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --text:    "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Arabic slogan face. Tajawal is geometric like Manrope, so the two
+     halves of the slogan read as one voice rather than as a translation
+     bolted on. The fallbacks are the faces Windows and macOS actually
+     ship with Arabic coverage. */
+  --arabic:  "Tajawal", "Segoe UI", "Geeza Pro", Tahoma, sans-serif;
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 4.5vw, 4.5rem);
+  --maxw:   1200px;
+
+  /* Motion */
+  --ease: cubic-bezier(.16, .84, .3, 1);
+}
+
+
+/* ── Reset ──────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--char);
+  font-family: var(--text);
+  font-size: clamp(1rem, .97rem + .16vw, 1.0625rem);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, picture { display: block; max-width: 100%; }
+
+/* Every photograph on this page is wrapped in <picture> for the webp
+   source. <picture> is a wrapper with auto height, so an img sized with
+   height:100% resolves against the WRAPPER, not the styled box — and
+   silently falls back to the file's intrinsic pixel height. That bit
+   the drink stage once (a 339px image overflowing a 260px box upward
+   into the heading). Any box that sizes its img by HEIGHT must size the
+   picture too.
+
+   The hero is deliberately NOT in this list any more: it sizes its
+   cutout by width and lets the height follow the artwork's own ratio,
+   so forcing the wrapper to 100% height would squash it. */
+.dcard__shot picture { height: 100%; }
+ul { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3 { margin: 0; }
+p  { margin: 0; }
+dl, dd { margin: 0; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--char);
+  color: var(--cream);
+  padding: .9rem 1.4rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus { left: 0; }
+
+/* Read but not seen. Used where a visual layout is not a sentence —
+   the #dollar equation is three terms and two operators on screen, and
+   a plain sentence to a screen reader. Not `display:none`, which would
+   hide it from assistive tech as well. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ── Texture ────────────────────────────────────────────────────────
+   Two real materials, both applied with background-blend-mode so the
+   COLOUR still comes from the token underneath. That is the whole
+   trick: the texture modulates the ground, it never replaces it, so
+   every contrast ratio measured against the flat token still holds.
+
+   1. WHITE MARBLE — images/marble.webp, generated procedurally (see
+      images/marble.svg for the source and why it is drawn, not
+      photographed). Multiplied over cream, so cream stays cream and
+      only picks up stone veining. It is deliberately near-white: it
+      sits under type everywhere it is used.
+
+   2. GREEN NOISE — images/green-noise.webp, supplied. It is a LIGHT
+      texture (green through to near-cream), so it can never be used as
+      a straight background behind cream text — the pale corner would
+      drop contrast through the floor. Multiplied over a deep green
+      token instead, it can only ever darken:
+        #2F6136 x its palest pixel  -> rgb(47,96,47)   still dark
+        #2F6136 x its greenest pixel -> rgb(11,67,19)  darker again
+      So the grain arrives and the text stays safe.
+
+   `cover` + `no-repeat`, never `repeat`: neither file is seamless, and
+   a tiled non-seamless texture shows a hard grid.
+   ─────────────────────────────────────────────────────────────────── */
+
+.hero,
+.counter,
+.board,
+.visit {
+  background-color: var(--cream);
+  background-image: url("images/marble.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  /* `fixed` sizes the slab against the VIEWPORT rather than the
+     element. Without it, `cover` on a 3000px-tall section stretches one
+     1400px square to that height and every vein turns into a smear.
+     It also means the stone stays put while the page moves over it,
+     which is what a real counter top does. */
+  background-attachment: fixed;
+}
+
+/* `fixed` backgrounds are repainted on every scroll frame and are a
+   known jank source on mobile GPUs — and iOS has historically ignored
+   it anyway. Below the breakpoint the slab scrolls with the section;
+   the sections are short enough there that the stretch is not visible. */
+@media (max-width: 760px) {
+  .hero, .counter, .board, .visit { background-attachment: scroll; }
+}
+
+.dcard--green {
+  background-color: var(--green-deep);
+  background-image: url("images/green-noise.webp");
+  background-size: cover;
+  background-position: 32% 38%;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+}
+
+.site-foot {
+  background-image: url("images/green-noise.webp");
+  background-size: cover;
+  background-position: 70% 30%;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+}
+
+/* Different crop from the footer's on purpose — the same texture at the
+   same offset twice on one page reads as a repeated tile rather than as
+   material. */
+.dollar {
+  background-image: url("images/green-noise.webp");
+  background-size: cover;
+  background-position: 12% 70%;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+}
+
+/* Belt and braces for the two grounds that carry cream text on top of
+   a texture: if the image 404s or is still in flight, the flat token
+   is what paints, and that token is the one the contrast was measured
+   against. */
+.dcard--green { color: var(--cream); }
+
+
+/* ── Shared ─────────────────────────────────────────────────────── */
+
+.wrap {
+  width: min(100% - (var(--gutter) * 2), var(--maxw));
+  margin-inline: auto;
+}
+
+/* Small wide-tracked caps. The one recurring "voice" of the system —
+   it appears above every section and nowhere else. */
+.label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  margin-bottom: 1.1rem;
+}
+.label-on-green { color: var(--cream); opacity: .82; }
+.label-gold     { color: var(--gold-soft); }
+
+h1, h2, h3 {
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  line-height: .98;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+  color: var(--green-ink);
+}
+h2 { font-size: clamp(2rem, 1.2rem + 3.4vw, 3.5rem); }
+
+h2.on-green, h2.on-dark { color: var(--cream); }
+
+.lede {
+  font-size: clamp(1.02rem, .98rem + .38vw, 1.22rem);
+  line-height: 1.55;
+  max-width: 44ch;
+  color: #4A4A42;
+}
+.lede-on-green { color: rgba(244, 239, 228, .88); }
+.lede-on-dark  { color: rgba(244, 239, 228, .80); }
+
+
+/* ── Buttons ────────────────────────────────────────────────────────
+   Pills. The whole system is built on soft organic shape now — blobs,
+   rounded cards, chip bars — and a square button was the one hard
+   corner left fighting it.
+
+   The solid button lifts on a soft shadow instead of the old hard
+   offset block: an offset block is a print-registration gesture and it
+   reads as a mistake next to a rounded shape.
+   ─────────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7em;
+  padding: .95em 1.7em;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-family: var(--text);
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform .2s var(--ease),
+    box-shadow .2s var(--ease),
+    background-color .2s var(--ease),
+    color .2s var(--ease),
+    border-color .2s var(--ease);
+}
+.btn-sm { padding: .7em 1.2em; font-size: .7rem; }
+
+/* The circular arrow badge inside a pill, as in the reference. It is a
+   <span> in the markup so it never gets read out as content. */
+.btn-arrow {
+  display: grid;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  margin-right: -.75em;   /* sits snug in the pill's right end */
+  margin-left: .15em;
+  border-radius: 50%;
+  background: rgba(244, 239, 228, .16);
+  flex: none;
+  transition: transform .2s var(--ease), background-color .2s var(--ease);
+}
+.btn-arrow svg {
+  width: .95em;
+  height: .95em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.btn:hover .btn-arrow { transform: translateX(3px); }
+
+.btn-solid {
+  background: var(--green-deep);
+  border-color: var(--green-deep);
+  color: var(--cream);
+  box-shadow: 0 6px 18px -8px rgba(35, 75, 41, .55);
+}
+.btn-solid:hover,
+.btn-solid:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -12px rgba(35, 75, 41, .6);
+}
+.btn-solid:active { transform: translateY(0); }
+
+.btn-line {
+  background: transparent;
+  border-color: var(--green-ink);
+  color: var(--green-ink);
+}
+.btn-line .btn-arrow { background: rgba(35, 75, 41, .12); }
+.btn-line:hover,
+.btn-line:focus-visible {
+  background: var(--green-ink);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+.btn-line:hover .btn-arrow { background: rgba(244, 239, 228, .18); }
+
+/* White pill on a green ground — the "JOIN NOW" treatment. */
+.btn-cream {
+  background: var(--cream);
+  border-color: var(--cream);
+  color: var(--green-ink);
+  box-shadow: 0 6px 18px -8px rgba(16, 40, 20, .45);
+}
+.btn-cream .btn-arrow { background: rgba(35, 75, 41, .12); }
+.btn-cream:hover,
+.btn-cream:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px -12px rgba(16, 40, 20, .5);
+}
+
+/* On green and charcoal grounds the outline button inverts */
+.counter .btn-line, .visit .btn-line {
+  border-color: rgba(244, 239, 228, .5);
+  color: var(--cream);
+}
+.counter .btn-line:hover, .visit .btn-line:hover {
+  background: var(--cream);
+  color: var(--green-ink);
+  border-color: var(--cream);
+}
+
+
+/* ── Header ─────────────────────────────────────────────────────── */
+
+.site-head {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--cream);
+  border-bottom: 1px solid var(--cream-3);
+}
+.head-in {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  min-height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  text-decoration: none;
+  margin-right: auto;
+}
+/* ── Visual rhymes ──────────────────────────────────────────────────
+   Taken from the ACTUAL logo (#i-logo / images/logo.svg), now that it
+   has been rebuilt as vector. An earlier pass rhymed on a guess at the
+   B's shape and got one of them backwards — see rhyme 2.
+
+   What is actually distinctive about the mark, in order:
+
+     a. THE DELIBERATE GAP. The B has no left stem; all that is left of
+        it is a short floating bar with clear air above and below. That
+        interruption is the signature move of this logo, more than the
+        letter or the sprout.
+     b. MONOLINE. One constant stroke weight for everything — letter,
+        stalk and leaves alike.
+     c. OUTLINED, NEVER FILLED. Even the leaves are open counters.
+     d. BUTT CAPS. Every terminal is a flat cut, not a round one.
+
+   Rhyming on the sprout is avoided everywhere EXCEPT inside the mark
+   itself: green here is ink, not foliage, and repeating leaves around
+   the page would turn a coffee bar into a plant shop.
+
+     1. .brand-mark — the tile is square on the open side and round on
+        the bowl side, echoing the B's own asymmetry.
+     2. .every-rule — bar, gap, short tick: the broken stem (a). It was
+        previously a bar with a ROUND terminal, which contradicted (d)
+        — the logo has no round ends anywhere. Now butt-cut, like the
+        mark. Appears under the hero tagline and again in the footer,
+        which is what makes it read as a system rather than a flourish.
+     3. #i-blob — the lobed cloud behind the deck and the map is a run
+        of round masses, the same soft geometry as the bowls and the
+        leaf bodies, at page scale.
+   ─────────────────────────────────────────────────────────────────── */
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  background: var(--green-deep);
+  /* --gold-soft lands at 4.47:1 here — three hundredths short. The mark
+     gets its own brighter gold rather than lifting the token everywhere. */
+  color: #F3D68C;
+  /* Rhyme 1: flat on the stem side, round on the bowl side. */
+  border-radius: 5px 15px 15px 5px;
+}
+
+/* The real monogram, inherited in gold from .brand-mark's `color`.
+   stroke-width is set HERE, on the instance: a <use> clones its symbol
+   into a shadow tree that descendant selectors cannot reach, and only
+   inherited properties cross — stroke and stroke-width do, so this
+   lands on the cloned geometry. Same rule as every other symbol in
+   this file. */
+.brand-logo {
+  width: 17px;
+  height: 21px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  /* The symbol's viewBox is 50.7 units wide and it renders at 17px,
+     so the mark's native 4.6-unit monoline lands at ~1.5px. Set in
+     viewBox units, not px — the browser scales it with the shape,
+     which is what keeps it the same logo at any size. */
+  stroke-width: 4.6;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+.brand-name { display: grid; line-height: 1.05; }
+.brand-word {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.22rem;
+  letter-spacing: -.02em;
+  color: var(--green-ink);
+}
+.brand-sub {
+  font-size: .56rem;
+  font-weight: 700;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+
+.nav { display: flex; gap: clamp(1rem, 2.2vw, 2rem); }
+.nav a {
+  position: relative;
+  font-size: .82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--char);
+  padding-block: .35rem;
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .22s var(--ease);
+}
+.nav a:hover::after, .nav a:focus-visible::after { transform: scaleX(1); }
+
+@media (max-width: 640px) {
+  .nav { display: none; }   /* the two CTAs in the hero cover the same ground */
+}
+
+
+/* ── Hero ───────────────────────────────────────────────────────────
+   Two blocks, hard seam. See the note in index.html about why the
+   photo's olive ground and the brand green are never blended.
+   ─────────────────────────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: var(--cream);   /* NOT the shorthand — it would reset the marble background-image set in the Texture block */
+}
+
+/* Single column on a phone: headline, photo, then the supporting copy.
+   The two-column pairing only starts at 900px (below).
+
+   `order` is doing real work here. The DOM order is head → sub → shot,
+   because that is what the 900px grid-template-areas needs. Left alone
+   on a phone that puts the photograph AFTER the buttons and the
+   address, stranded at the bottom. Ordering pulls it back between the
+   headline and its supporting copy, where it belongs.
+
+   Above 900px the items are placed by named grid areas, which ignores
+   `order` entirely — so this costs nothing there. */
+.hero-head { order: 1; padding-top: clamp(2.2rem, 6vw, 3.2rem); }
+.hero-shot { order: 2; }
+.hero-sub  { order: 3; padding-bottom: clamp(2.5rem, 6vw, 4rem); }
+
+.hero-head,
+.hero-sub {
+  padding-inline: var(--gutter);
+  max-width: 40rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+/* Brought down from a 5.6rem ceiling. Beside the photograph rather
+   than above a tall text column, the old size pushed "lifts your mood." into
+   the artwork and forced the two apart; smaller lets them sit close,
+   which is the whole point of the pairing. */
+.hero-h1 {
+  font-size: clamp(2.35rem, 1.4rem + 3.7vw, 3.95rem);
+  font-weight: 600;
+  line-height: .92;
+  letter-spacing: -.035em;
+  color: var(--green-ink);
+}
+.hero-h1 em {
+  display: block;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--green-deep);
+}
+
+.every {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .55rem .8rem;
+  margin-top: 1.1rem;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+/* Rhyme 2: the broken stem. A bar, a gap, then a short tick — the same
+   interruption the B makes where its stem should be.
+
+   Square ends, no border-radius: the mark is butt-capped throughout,
+   and a rounded rule quietly contradicts it. The gap is ~0.65x the
+   logo's own stroke-to-gap ratio, scaled to this size. */
+.every-rule {
+  position: relative;
+  display: block;
+  width: clamp(38px, 7vw, 74px);
+  height: 2px;
+  background: var(--gold);
+  flex: none;
+}
+.every-rule::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 7px;
+  height: 2px;
+  background: var(--gold);
+  transform: translateX(calc(100% + 4px));
+}
+
+.hero .lede { margin-top: 1.8rem; }
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: 2.2rem;
+}
+
+/* The catchphrase. Set in display type at near-lede size so it reads as
+   a second line of the headline rather than as a caption — it was 15px
+   sans below the buttons and nobody was going to see it.
+
+   The coin is type in a circle, not an image: at this size a drawn coin
+   would be mud, and the number is the whole point. */
+.hero-kicker {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  margin-top: 1.7rem;
+}
+
+.kicker-coin {
+  display: grid;
+  place-items: center;
+  width: 3.05rem;
+  height: 3.05rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--gold);
+  /* A struck-coin edge rather than a flat disc. Both rings are gold at
+     different lightness, so this stays one colour, not a new one. */
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, .34),
+    inset 0 0 0 3px rgba(122, 92, 18, .22),
+    0 4px 12px -4px rgba(122, 92, 18, .5);
+}
+.kicker-coin-face {
+  font-family: var(--display);
+  font-size: 1.16rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.03em;
+  /* --char ON gold, not gold on cream: 8.9:1, safe at any size. */
+  color: var(--char);
+}
+
+.kicker-text {
+  font-family: var(--display);
+  font-size: clamp(1.12rem, 1rem + .5vw, 1.42rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  color: var(--green-ink);
+  text-wrap: balance;
+}
+/* The payoff, in the same italic the tagline uses. */
+.kicker-text em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--green-deep);
+  white-space: nowrap;
+}
+
+.hero-where {
+  margin-top: 1.6rem;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* The cutout. No panel, no ground, no crop: hero-3-trim.png has real alpha
+   and brings its own green blob, so it is laid on the cream as a
+   free-standing object.
+
+   object-fit is deliberately NOT used. `cover` on a transparent cutout
+   crops the drink; `contain` inside a ratio box leaves dead air that
+   throws the optical centre off. Letting the image keep its own
+   intrinsic ratio is the only version where the blob lands where the
+   artwork intends. */
+.hero-shot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--gutter);
+}
+.hero-img {
+  width: 100%;
+  height: auto;
+  /* Bleeds slightly past the column on wide screens so the blob runs
+     off the right edge the way it does in the reference. */
+  max-width: none;
+  filter: drop-shadow(0 26px 34px rgba(30, 68, 35, .18));
+}
+
+@media (min-width: 900px) {
+  /* The headline sits BESIDE the photograph, and everything that
+     supports it — catchphrase, lede, buttons, location — runs
+     underneath both. Previously the whole text stack was one tall
+     column next to the image, which left the headline stranded at the
+     top and a lot of dead cream beside the buttons.
+
+     `head` is deliberately bottom-aligned and `shot` centred: the
+     headline should sit ON the photo's optical centre line, not float
+     above it. */
+  .hero {
+    /* `auto` on the shot column, not a percentage. Trimming the alpha
+       padding changed the artwork's aspect from 1.78 to 1.21, so a
+       percentage column made it render very tall and swamp the
+       headline. The image is sized by HEIGHT below and this column
+       simply shrinks to whatever width that needs. */
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "head shot"
+      "sub  sub";
+    align-items: center;
+    column-gap: clamp(1rem, 2.5vw, 2.5rem);
+    padding-inline: max(var(--gutter), calc((100vw - var(--maxw)) / 2));
+    padding-block: clamp(1.6rem, 3.5vw, 2.6rem) clamp(2.4rem, 5vw, 4rem);
+  }
+
+  .hero-head {
+    grid-area: head;
+    align-self: center;
+    padding: 0;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  .hero-sub {
+    grid-area: sub;
+    padding: 0;
+    max-width: none;
+    margin-inline: 0;
+    margin-top: clamp(1.4rem, 3vw, 2.2rem);
+  }
+
+  .hero-shot {
+    grid-area: shot;
+    padding-inline: 0;
+    width: auto;
+  }
+
+  /* Sized by height so the pairing stays balanced: the headline sets
+     the row, and the artwork matches it instead of dictating it. */
+  .hero-img {
+    height: clamp(250px, 27vw, 380px);
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* The supporting copy runs full width once it is under the photo, so it
+   needs its own measure or the lede stretches to 90 characters. */
+@media (min-width: 900px) {
+  .hero-sub {
+    display: grid;
+    grid-template-columns: minmax(0, 30rem) minmax(0, 1fr);
+    column-gap: clamp(2rem, 5vw, 4rem);
+    align-items: start;
+  }
+  .hero-sub .hero-kicker { grid-column: 1; margin-top: 0; }
+  .hero-sub .lede        { grid-column: 1; }
+  .hero-sub .hero-cta    { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .hero-sub .hero-where  { grid-column: 1 / -1; }
+}
+
+/* Below 900px the cutout sits between the headline and the supporting
+   copy at its natural ratio. Nothing crops because nothing is boxed. */
+
+
+/* ── On the counter — chip bar over a horizontal rail ──────────────
+   Cream ground now, not the green wall. The green has moved onto ONE
+   card — the signature — which is what makes it read as featured
+   without needing a badge, a border or a "featured" label.
+
+   Card radius is 34px and the shot well inside it is 26px. They are
+   deliberately unequal: concentric rounded shapes need the inner
+   radius smaller than the outer minus the padding, or the corners
+   look pinched.
+   ─────────────────────────────────────────────────────────────────── */
+
+.counter {
+  background-color: var(--cream);   /* NOT the shorthand — it would reset the marble background-image set in the Texture block */
+  /* Tight at the top: the hero already ends on cream, so a big pad
+     here just reads as the page having stalled. The bottom keeps its
+     room because the board section below starts with type. */
+  padding-block: clamp(1.5rem, 3vw, 2.5rem) clamp(3rem, 7vw, 5rem);
+  overflow: hidden;   /* the blobs run off the edges */
+}
+
+.counter-head {
+  display: grid;
+  gap: clamp(1.4rem, 3vw, 2.5rem);
+  align-items: end;
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
+}
+@media (min-width: 860px) {
+  .counter-head { grid-template-columns: 1fr auto; }
+  .counter-side {
+    display: grid;
+    gap: 1.2rem;
+    justify-items: end;
+    text-align: right;
+  }
+  .counter-side .lede { max-width: 32ch; margin-left: auto; }
+}
+
+
+/* ── The deck ─────────────────────────────────────────────────────
+   Five cards on a turntable, three of them visible: centre, left,
+   right. script.js writes ONE transform per card whenever the deck
+   moves and the browser eases it home — nothing runs per frame, which
+   is why it settles cleanly instead of drifting.
+
+   The slot table lives in script.js (FAN / ROW), not here. CSS owns
+   what a card looks like; JS owns where it sits.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* The stage is only as wide as it needs to be, so the arrows land just
+   clear of the deck. Side cards bleed past it and are clipped by the
+   section's own overflow. */
+.stage {
+  position: relative;
+  /* CONTAINS the deck's z-indexes. script.js writes z-index 4-40 inline
+     on the cards, and .site-head is z-index 40 — `position: relative`
+     with no z-index does NOT create a stacking context, so the front
+     card's 40 was competing with the header's 40 in the ROOT context.
+     Later in the DOM wins, so the card painted over the sticky header
+     while scrolling. `overflow: hidden` on .counter does not help,
+     because the header overlaps the counter's box on the way past.
+
+     z-index: 0 makes a stacking context, so the whole 4-40 range is now
+     local to the stage and can never outrank the header. Do not remove
+     this to "clean up a zero". */
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.5rem, 3vw, 2rem);
+  max-width: min(720px, 100% - var(--gutter));
+  height: clamp(380px, 88vw, 460px);
+  margin: clamp(1rem, 3vw, 2rem) auto 0;
+}
+
+.deck {
+  position: relative;
+  width: clamp(216px, 61vw, 290px);
+  height: clamp(310px, 78vw, 380px);
+  flex: none;
+  cursor: grab;
+  /* Vertical scrolling still belongs to the page — without this a
+     downward swipe on the deck would be swallowed. */
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.deck.is-grabbing { cursor: grabbing; }
+.deck:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 14px;
+  border-radius: 30px;
+}
+
+.dcard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem 1.15rem 1.2rem;
+  border-radius: 28px;
+  background-image: linear-gradient(166deg, var(--tint, #F2ECE0) 0%, var(--tint-2, #E6DECE) 100%);
+  color: var(--char);
+  box-shadow: 0 18px 34px -20px rgba(30, 68, 35, .55);
+  /* Only the front card is transformed to identity, so this transition
+     is what makes the whole deck turn. */
+  transition:
+    transform .62s cubic-bezier(.22, .78, .3, 1),
+    opacity   .42s var(--ease),
+    box-shadow .42s var(--ease);
+  will-change: transform;
+}
+
+.dcard.is-front {
+  box-shadow: 0 30px 56px -24px rgba(30, 68, 35, .6);
+}
+
+/* The signature card. Green ground, so its type inverts.
+
+   NOTE: the ground itself is set in the Texture block near the top of
+   this file (green noise multiplied over --green-deep). Do not add a
+   background-image here — this rule is later in the cascade and would
+   silently win, dropping the texture. */
+.dcard--green { color: var(--cream); }
+
+.dcard__tag {
+  align-self: flex-start;
+  padding: .4em .9em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .62);
+  color: var(--green-ink);
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+/* Gold-on-charcoal, not gold-on-green: --gold on the green card
+   measures 2.9:1, which is a shape rather than a word at this size. */
+.dcard__tag--gold   { background: var(--gold); color: var(--char); }
+.dcard__tag--purple { background: #E4DAF0; color: #4A3369; }
+
+.dcard__shot {
+  flex: 1;
+  min-height: 0;          /* lets the figure actually shrink in a flex column */
+  margin: .85rem 0 .9rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+/* <picture> is an auto-height wrapper: an img at height:100% resolves
+   against the WRAPPER and silently falls back to intrinsic pixel
+   height, overflowing the card. The wrapper has to be sized too. */
+.dcard__shot picture { height: 100%; display: flex; align-items: flex-end; }
+.dcard__shot img {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(30, 42, 28, .22));
+}
+/* The illustrated stand-ins are square artwork rather than alpha
+   cutouts, so they centre instead of sitting on the card's floor. */
+.dcard__shot--illo { align-items: center; }
+.dcard__shot--illo img { height: auto; width: 88%; }
+
+.dcard__body { flex: none; }
+
+.dcard__name {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -.025em;
+  color: var(--green-ink);
+}
+.dcard--green .dcard__name { color: var(--cream); }
+
+.dcard__desc {
+  margin-top: .45rem;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.dcard--green .dcard__desc { color: rgba(244, 239, 228, .85); }
+
+.dcard__foot {
+  flex: none;
+  margin-top: .9rem;
+  padding-top: .8rem;
+  border-top: 1px solid rgba(35, 75, 41, .16);
+}
+.dcard--green .dcard__foot { border-top-color: rgba(244, 239, 228, .24); }
+
+.dcard__price {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--green-ink);
+  font-variant-numeric: tabular-nums;
+}
+.dcard--green .dcard__price { color: var(--gold-soft); }
+.dcard__price i {
+  font-family: var(--text);
+  font-style: normal;
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  vertical-align: .45em;
+  margin-left: .3em;
+  opacity: .75;
+}
+
+/* ── No-JS fallback ───────────────────────────────────────────────
+   script.js adds `is-live` to the stage once it has taken over. Until
+   then — and forever, if JS is off — no transform is ever written, so
+   absolutely positioned cards would stack on top of one another.
+
+   So the default state in CSS is NOT the deck: it is a plain wrapped
+   row where all five drinks are readable, and the arrows (which would
+   do nothing) are hidden. The deck is the enhancement.
+   ─────────────────────────────────────────────────────────────────── */
+.stage:not(.is-live) {
+  height: auto;
+  max-width: min(100% - var(--gutter), var(--maxw));
+}
+.stage:not(.is-live) .deckbtn { display: none; }
+.stage:not(.is-live) .deck {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  cursor: default;
+}
+.stage:not(.is-live) .dcard {
+  position: static;
+  width: clamp(220px, 80vw, 260px);
+  height: auto;
+  min-height: 340px;
+}
+/* The dots are written by JS too, so with no JS there is nothing in
+   the container to space away from. */
+.stage:not(.is-live) ~ .dots { display: none; }
+
+/* The round arrows either side of the deck. */
+.deckbtn {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--cream-3);
+  border-radius: 50%;
+  background: #FFFDF8;
+  color: var(--green-ink);
+  cursor: pointer;
+  box-shadow: 0 6px 18px -8px rgba(30, 68, 35, .35);
+  transition: transform .2s var(--ease), background-color .2s var(--ease),
+              color .2s var(--ease);
+}
+.deckbtn svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.deckbtn:hover {
+  background: var(--green-deep);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+
+/* ── Dots ─────────────────────────────────────────────────────────
+   Built by script.js from the cards the current filter leaves in play,
+   so the count follows the filter. Decorative and aria-hidden: each
+   one duplicates a move the deck already supports from the keyboard.
+   ─────────────────────────────────────────────────────────────────── */
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: clamp(1rem, 3vw, 1.8rem);
+}
+.dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cream-3);
+  cursor: pointer;
+  transition: width .25s var(--ease), background-color .25s var(--ease);
+}
+.dots button.is-on {
+  width: 26px;
+  border-radius: 999px;
+  background: var(--green-deep);
+}
+
+
+
+/* ── The dollar ─────────────────────────────────────────────────────
+   Deep green with the supplied noise texture over it — the one colour
+   block between the hero and the footer, so the scroll gets a beat
+   instead of running cream the whole way down.
+
+   Texture is multiplied over --green-deep in the Texture block near the
+   top of this file, the same way the signature card and the footer are.
+   That is what keeps cream type safe on it: a light texture multiplied
+   over a dark token can only ever darken.
+   ─────────────────────────────────────────────────────────────────── */
+
+.dollar {
+  background-color: var(--green-deep);
+  color: var(--cream);
+  padding-block: clamp(3.2rem, 7vw, 5.5rem);
+  overflow: hidden;
+}
+
+.dollar-in { display: grid; gap: clamp(2rem, 4.5vw, 3rem); }
+
+.dollar-type h2 { color: var(--cream); }
+
+/* The equation reads DOWN, not across.
+
+   Laid out as a row first, it wrapped: "One espresso" is far too long
+   to sit beside two other display-size terms in the space this column
+   has, so the last operator ended up stranded at the end of a line
+   with nothing after it. Stacking removes the problem outright — and a
+   vertical equation is the stronger read anyway, because each term
+   lands on its own beat. */
+.equation {
+  display: grid;
+  justify-items: start;
+  gap: clamp(.5rem, 1.4vw, .9rem);
+}
+
+.eq-term {
+  display: grid;
+  gap: .25rem;
+}
+
+.eq-value {
+  font-family: var(--display);
+  font-size: clamp(2rem, 1.2rem + 3.4vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+/* The last term is the payoff, so it takes the gold. */
+.eq-term--last .eq-value { color: var(--gold-soft); }
+
+.eq-unit {
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 228, .72);
+}
+
+/* ≈ and = . Deliberately lighter than the terms: they are punctuation,
+   not content, and at display size they otherwise shout louder than
+   the numbers they join. Indented so they sit under the terms rather
+   than starting a new left edge of their own. */
+.eq-op {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, .9rem + 1.2vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(244, 239, 228, .45);
+  margin-left: .15em;
+}
+
+.eq-cup {
+  width: 24px;
+  height: 30px;
+  margin-bottom: .35rem;
+  fill: none;
+  stroke: var(--gold-soft);
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sits with the heading, not under the equation. Under the equation it
+   left the left-hand column empty for the equation's whole height and
+   made the section far taller than it needed to be. */
+.dollar-note {
+  margin-top: clamp(1.2rem, 3vw, 1.8rem);
+  max-width: 40ch;
+  font-size: .92rem;
+  line-height: 1.55;
+  color: rgba(244, 239, 228, .78);
+}
+
+@media (min-width: 900px) {
+  .dollar-in {
+    grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+    align-items: center;
+    column-gap: clamp(2.5rem, 7vw, 6rem);
+  }
+}
+
+/* ── The board ──────────────────────────────────────────────────────
+   Printed-board typography: name, leader dots, count, price. This is
+   how breadth gets shown when 46 photographs do not exist — and it is
+   more honest than 46 stand-in illustrations would be.
+   ─────────────────────────────────────────────────────────────────── */
+
+.board {
+  background-color: var(--cream);   /* NOT the shorthand — it would reset the marble background-image set in the Texture block */
+  padding-block: clamp(3.5rem, 8vw, 7rem);
+}
+.board-head {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+@media (min-width: 860px) {
+  .board-head { grid-template-columns: 1.1fr 1fr; align-items: end; }
+  .board-head .lede { padding-bottom: .4rem; }
+}
+
+.index {
+  border-top: 2px solid var(--green-ink);
+  column-gap: clamp(2rem, 5vw, 4.5rem);
+}
+@media (min-width: 780px) { .index { columns: 2; } }
+
+.index li {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding-block: .95rem;
+  border-bottom: 1px solid var(--cream-3);
+  break-inside: avoid;
+}
+.ix-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  color: var(--green-ink);
+  flex: none;
+}
+.ix-dots {
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 1.5rem;
+  align-self: center;
+  background-image: radial-gradient(circle, var(--cream-3) 1px, transparent 1px);
+  background-size: 6px 2px;
+  background-repeat: repeat-x;
+  background-position: 0 center;
+}
+.ix-n {
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--gold-ink);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+  min-width: 1.4em;
+  text-align: right;
+}
+.ix-p {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex: none;
+  min-width: 6.2em;
+  text-align: right;
+}
+.index .ix-star .ix-name { color: var(--gold-ink); }
+.index .ix-star .ix-name::after {
+  content: "";
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  margin-left: .5em;
+  vertical-align: .28em;
+}
+
+.board-cta {
+  position: relative;   /* anchors .deco-arrow */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem 1.8rem;
+  /* Deepened so .deco-arrow has clear air above the row to sit in. */
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+.board-note { font-size: .82rem; color: var(--muted); }
+
+
+/* ── Visit ──────────────────────────────────────────────────────────
+   The reference's closing block: a soft-masked map on one side, the
+   address and an OPEN DAILY pill on the other, on cream.
+
+   It used to be a charcoal band. Charcoal was the colour of the real
+   walls, but it cut the page in half right where it should be opening
+   out, and the reference closes on light.
+   ─────────────────────────────────────────────────────────────────── */
+
+.visit {
+  background-color: var(--cream);   /* NOT the shorthand — it would reset the marble background-image set in the Texture block */
+  color: var(--char);
+  padding-block: clamp(3rem, 7vw, 6rem);
+  overflow: hidden;
+}
+.visit-in {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+@media (min-width: 880px) {
+  .visit-in { grid-template-columns: 1.05fr .95fr; }
+}
+
+/* The map, wearing the same lobed mask as the blobs so it reads as
+   part of the shape language instead of as a pasted widget.
+
+   An iframe cannot be clipped by `clip-path` on itself reliably across
+   engines — the composited frame ignores it in some builds. So the
+   MASK lives on the wrapper and the iframe just fills it. */
+/* A plain rectangle. The map was masked to the logo silhouette and it
+   read badly — a solid B at that size stops looking like a letter.
+
+   Dropping the mask also removes the problem it created: Google's Maps
+   terms require their attribution logo (bottom-left of the embed) to
+   stay visible, and every shaped mask was clipping that corner. An
+   unmasked rectangle shows the whole embed, so there is nothing left
+   to work around.
+
+   The corner radius is modest and matches the drink cards, so it still
+   belongs to the page's rounded language. Set it to 0 for a hard
+   rectangle — nothing else depends on it. */
+.visit-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: clamp(18px, 2.5vw, 28px);
+  overflow: hidden;
+  background: var(--cream-2);
+}
+.visit-map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* The watermark above the footer. This was the lobed cloud; it is now
+   the logo silhouette, so the two shapes in this section are the mark
+   twice over rather than the mark next to a generic blob.
+
+   It MUST set `color` — .blobfill fills with currentColor, and with
+   nothing set it inherits the section's near-black body colour and
+   lands as a black splat.
+
+   Kept quiet on purpose: the map beside it is already a large B, and
+   two loud copies of the same shape would fight. Low opacity and a
+   tilt make this read as a watermark under the map, not a second logo. */
+.blob-visit {
+  bottom: -10%; left: -11%;
+  width: min(30vw, 330px);
+  aspect-ratio: 50.7 / 63.3;
+  color: var(--green);
+  opacity: .16;
+  transform: rotate(-13deg);
+}
+
+.visit-type .lede { margin-bottom: clamp(1.6rem, 3.5vw, 2.2rem); }
+
+.visit-name {
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 1rem + .6vw, 1.4rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  color: var(--green-ink);
+}
+.visit-addr {
+  margin-top: .45rem;
+  font-size: .96rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* The OPEN DAILY pill from the reference: a green capsule holding the
+   label, with the hours sitting outside it on the cream. */
+.openpill {
+  display: inline-flex;
+  align-items: center;
+  gap: .7rem;
+  margin-top: 1.2rem;
+}
+.openpill-tag {
+  padding: .5em 1.05em;
+  border-radius: 999px;
+  background: var(--green-deep);
+  color: var(--cream);
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.openpill-hrs {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--green-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.facts {
+  margin-top: clamp(1.6rem, 3.5vw, 2.2rem);
+  border-top: 1px solid var(--cream-3);
+}
+.fact {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 1rem;
+  padding-block: .9rem;
+  border-bottom: 1px solid var(--cream-3);
+}
+.fact dt {
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+  padding-top: .28rem;
+}
+.fact dd { font-size: .96rem; line-height: 1.5; color: var(--char); }
+.fact dd a {
+  color: var(--green-ink);
+  text-decoration-color: rgba(35, 75, 41, .4);
+  text-underline-offset: 3px;
+}
+.fact dd a:hover { color: var(--green-deep); }
+
+@media (max-width: 460px) {
+  .fact { grid-template-columns: 1fr; gap: .3rem; }
+}
+
+.visit-cta { margin-top: clamp(1.5rem, 3.5vw, 2rem); }
+
+/* Real placeholder, marked as one. Better than an invented address.
+   Gold-on-charcoal — the gold ground needs dark ink on cream now that
+   the section is light. */
+.todo {
+  display: inline-block;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--char);
+  background: var(--gold-soft);
+  padding: .1em .5em;
+}
+/* ── Footer ─────────────────────────────────────────────────────── */
+
+.site-foot {
+  /* background-COLOR, not the `background` shorthand: the shorthand
+     resets background-image to none and would wipe the green noise
+     texture set in the Texture block near the top of this file. */
+  background-color: var(--green-dark);
+  color: var(--cream);
+  padding-block: clamp(3rem, 6vw, 5rem) 1.5rem;
+}
+.foot-in {
+  display: grid;
+  gap: clamp(2.2rem, 5vw, 4rem);
+  padding-bottom: clamp(2rem, 4vw, 3rem);
+}
+@media (min-width: 760px) {
+  .foot-in { grid-template-columns: 1fr auto; align-items: start; }
+}
+
+.foot-tag {
+  font-family: var(--display);
+  font-size: clamp(1.7rem, 1.2rem + 2vw, 2.6rem);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -.03em;
+  color: var(--cream);
+}
+.foot-every {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .55rem .8rem;
+  margin-top: 1rem;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+.foot-every .every-rule { background: var(--gold); }
+
+/* ═══════════════════════════════════════════════════════════════════
+   THE ARABIC SLOGAN
+
+   بينيري كافيه — نكهة تِعدل المزاج / "A flavor that lifts your mood."
+
+   Three rules, one shape. Each of them:
+
+   • sets font-family explicitly — the Latin stack has no Arabic glyphs,
+     so without this the browser silently substitutes a system face and
+     the line stops matching the rest of the page;
+   • leaves letter-spacing alone. Arabic is a joined script; tracking it
+     pulls the connectors apart and the word visibly breaks. Every
+     tracked rule on this page is Latin-only for that reason;
+   • runs a taller line-height. The script's marks sit above and below
+     the baseline (the kasra under تِعدل is exactly this), and 1.2 clips
+     them against the line above.
+
+   dir="rtl" lives on the element in the HTML, not here — direction is
+   content, and it has to survive the stylesheet failing to load.
+   ═══════════════════════════════════════════════════════════════════ */
+.slogan-ar {
+  margin-top: 1.45rem;
+  /* dir="rtl" orders the glyphs; it must not drag the block to the
+     right-hand edge as well. The page is a left-aligned layout and the
+     Arabic is a sibling of the headline, not a caption floated opposite
+     it — so alignment is set here, independently of direction. */
+  text-align: left;
+  font-family: var(--arabic);
+  font-size: clamp(1.15rem, .95rem + .8vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.75;
+  color: var(--green-deep);
+}
+
+.visit-name-ar {
+  margin-top: .15rem;
+  font-family: var(--arabic);
+  font-size: clamp(1rem, .95rem + .35vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--gold-ink);
+}
+
+.foot-tag-ar {
+  margin-top: .75rem;
+  font-family: var(--arabic);
+  font-size: clamp(1rem, .9rem + .5vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--gold-soft);
+}
+
+.foot-nav { display: flex; gap: clamp(2.5rem, 6vw, 5rem); }
+.foot-nav div { display: grid; gap: .6rem; align-content: start; }
+.foot-nav h2 {
+  font-family: var(--text);
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  margin-bottom: .3rem;
+}
+.foot-nav a {
+  font-size: .9rem;
+  text-decoration: none;
+  color: rgba(244, 239, 228, .82);
+  width: fit-content;
+}
+.foot-nav a:hover { color: var(--cream); text-decoration: underline; text-underline-offset: 4px; }
+
+.foot-fine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .5rem 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(244, 239, 228, .16);
+  font-size: .76rem;
+  color: rgba(244, 239, 228, .6);
+}
+
+
+/* ── Motion ─────────────────────────────────────────────────────────
+   Headings and ledes only. Body copy that fades in is body copy you
+   cannot start reading.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* Scoped to .js (set by an inline script during parse) so that with
+   JavaScript off nothing is ever left at opacity 0. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.js .reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Remove motion, do not slow it down. */
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Must match the .js scope above or it loses on specificity. */
+  .js .reveal { opacity: 1; transform: none; }
+  .drink:hover .drink-shot img { transform: none; }
+}
+
+
+/* ── Print ──────────────────────────────────────────────────────── */
+
+@media print {
+  .site-head, .hero-shot, .hero-cta, .board-cta, .skip { display: none; }
+  body { background: #fff; color: #000; }
+  .counter, .visit, .site-foot { background: #fff; color: #000; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   ILLUSTRATION LAYER
+
+   Loose vector line art, drawn from the drink: beans, steam, splashes,
+   cups, swirls, sparkles. Organic in SHAPE — wobbly strokes and soft
+   blobs — not in subject. Nothing botanical.
+
+   Three rules hold the whole layer together:
+
+     1. It is decoration and behaves like it. Every mark is
+        aria-hidden, pointer-events:none, and sits at z-index 0 behind
+        content at z-index 1. It cannot be tabbed to, clicked, read by
+        a screen reader, or selected along with the text.
+
+     2. It never lands under running text. Positions are hand-placed in
+        the margins and gutters and checked at 390 / 768 / 1280 / 1600.
+        Anything that would collide at a small width is REMOVED at that
+        width rather than shrunk into confetti.
+
+     3. It never changes contrast. Marks sit behind text, never over
+        it, and blob fills stay in the same hue family as their ground
+        so the effective background under any glyph is unchanged.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* PRESENTATION MUST BE SET ON THE INSTANCE, NOT ON `.sprite path`.
+   A <use> clones its symbol into a shadow tree that outside selectors
+   cannot reach — `.sprite path {…}` styles the ORIGINAL in <defs>,
+   which is never rendered, and the clone falls back to SVG's default
+   `fill: black; stroke: none`. The symptom is line art arriving as
+   solid black blobs.
+
+   Only INHERITED properties cross the shadow boundary. fill, stroke,
+   stroke-width, stroke-linecap and stroke-linejoin all inherit, so
+   setting them on the instance reaches the cloned geometry.
+   `vector-effect` does NOT inherit, so it is deliberately absent here;
+   every symbol is instead rendered near 1:1 with its viewBox, which
+   keeps the stroke weight visually even without it. */
+.deco, .seal-bean {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The sparkle is the one solid mark — it needs mass to read at 20px. */
+.deco-spark-a, .deco-spark-b, .deco-spark-c { fill: currentColor; stroke: none; }
+
+/* The underline is inlined rather than <use>d, because it is the one
+   mark that must stretch to the width of the words above it. Inline
+   geometry is a real descendant, so `vector-effect` works here and
+   stops preserveAspectRatio="none" from fattening the stroke. */
+.deco-under path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.deco {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  overflow: visible;
+}
+
+/* Soft abstract fields. Asymmetric radii on purpose — an even ellipse
+   reads as a shape tool, an uneven one reads as drawn. Kept for the
+   small background washes; anything that has to READ as a shape uses
+   .blobfill instead. */
+.blob {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 58% 42% 47% 53% / 44% 56% 44% 56%;
+}
+
+/* The lobed cloud (#i-blob), filled. It deliberately opts out of the
+   .deco stroke rules below — those set fill:none, which would render
+   this as nothing at all. Colour comes from `color`, so one symbol
+   serves every tint on the page.
+
+   `fill` is set on the INSTANCE, not on `.blobfill path` — a <use>
+   clones its symbol into a shadow tree that outside selectors cannot
+   reach, and only inherited properties cross that boundary. `fill`
+   inherits; a descendant selector would style the unrendered original
+   in <defs> and the clone would fall back to solid black. */
+.blobfill {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  overflow: visible;
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Sections become positioning contexts; their content lifts above the
+   illustration. */
+.hero, .counter, .board, .visit, .site-foot, .signature { position: relative; }
+.hero > .hero-head,
+.hero > .hero-sub,
+.hero > .hero-shot,
+.counter > .wrap,
+.board > .wrap,
+.visit > .wrap,
+.site-foot > .wrap,
+.site-foot > .foot-fine,
+.signature > .sig-type,
+.signature > .sig-price { position: relative; z-index: 1; }
+
+
+/* ── Hero ───────────────────────────────────────────────────────── */
+
+/* The squiggle under "lifts your mood." — the one mark allowed near text,
+   because it sits deliberately below the descenders and uses the gold
+   that already passes on cream. */
+.hero-em { position: relative; display: inline-block; }
+.deco-under {
+  left: 0;
+  bottom: -.18em;
+  width: 100%;
+  height: .24em;
+  color: var(--gold);
+  opacity: .9;
+}
+
+.blob-hero {
+  top: -8%;
+  left: -14%;
+  width: min(46vw, 520px);
+  aspect-ratio: 1 / .86;
+  background: var(--green);
+  opacity: .07;
+}
+
+.deco-bean-a {
+  --r: -18deg;
+  top: 15%; right: 6%;
+  width: 42px; height: 29px;
+  color: var(--green-ink);
+  opacity: .34;
+  transform: rotate(var(--r));
+  animation: bob 7s var(--ease) infinite;
+}
+.deco-bean-b {
+  --r: 24deg;
+  bottom: 13%; left: 3%;
+  width: 30px; height: 21px;
+  color: var(--gold-ink);
+  opacity: .32;
+  transform: rotate(var(--r));
+  animation: bob 9s var(--ease) infinite reverse;
+}
+.deco-spark-a {
+  top: 29%; right: 3%;
+  width: 20px; height: 20px;
+  color: var(--gold);
+  opacity: .55;
+  animation: twinkle 4.5s ease-in-out infinite;
+}
+
+/* The seal. It used to straddle the hard seam between the cream column
+   and the photo panel — but that seam is gone with the cutout, and left:0
+   left it stranded in open cream halfway across the page.
+
+   Now it sits low and left, clear of the cup. Once the artwork was
+   trimmed of its transparent padding the old 12%/78% put the seal
+   squarely on top of the drink — the percentages are relative to the
+   shot box, and that box got much tighter. */
+.seal {
+  position: absolute;
+  z-index: 2;
+  left: -6%;
+  top: 84%;
+  width: clamp(96px, 12vw, 148px);
+  height: clamp(96px, 12vw, 148px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  overflow: visible;
+}
+.seal-ring    { fill: var(--cream); stroke: none; }
+.seal-ring-in { fill: var(--green-deep); }
+.seal-text {
+  font-family: var(--text);
+  font-size: 15px;
+  font-weight: 800;
+  /* The legend lost six characters when the tagline changed. Tracking
+     is what refills the ring — at .16em the text stopped short of its
+     own start and left a visible bald patch on the arc. */
+  letter-spacing: .355em;
+  fill: var(--green-ink);
+  animation: spin 26s linear infinite;
+  transform-origin: 100px 100px;
+}
+.seal-bean { color: var(--gold-soft); }
+
+/* Below 900px the hero stacks and the seam it straddles stops
+   existing. Move it onto the corner of the photograph instead. */
+@media (max-width: 899px) {
+  .seal { left: auto; right: 5%; top: auto; bottom: -5%; transform: none; }
+  .blob-hero { display: none; }
+  .deco-bean-a { top: 8%; right: 5%; }
+}
+@media (max-width: 520px) {
+  /* At phone width the gutters are too narrow to hold marks beside
+     text without crowding it. Keep the seal, drop the scatter. */
+  .deco-bean-a, .deco-bean-b, .deco-spark-a { display: none; }
+}
+
+
+/* ── Counter ────────────────────────────────────────────────────── */
+
+.counter { overflow: hidden; }
+
+/* The deck's own backdrop. These are the one pair of shapes allowed to
+   be BOLD: the cards on top are opaque, so nothing is reading text off
+   the tint, and a pale wash at this size just reads as a stray circle.
+
+   Pinned to the deck's band (top 34%) rather than to the section top,
+   so neither ever slides under .counter-head, where the heading and
+   the lede DO read off the cream. */
+/* Sized so the LOBES are inside the frame. At 700px with the shape
+   half off-canvas you only ever see one smooth arc, and a big enough
+   arc is indistinguishable from a circle — which defeats the whole
+   reason for using a path instead of border-radius. */
+.blob-counter-a {
+  top: 26%; right: -7%;
+  width: min(40vw, 440px);
+  aspect-ratio: 200 / 172;
+  color: var(--green);
+  opacity: .34;
+  transform: rotate(-14deg);
+}
+.blob-counter-b {
+  bottom: 3%; left: -8%;
+  width: min(31vw, 340px);
+  aspect-ratio: 200 / 172;
+  color: #7FBF86;
+  opacity: .32;
+  transform: rotate(22deg);
+}
+
+.deco-steam-a {
+  top: 6%; right: 13%;
+  width: 46px; height: 52px;
+  color: var(--cream);
+  opacity: .30;
+  animation: rise 6s var(--ease) infinite;
+}
+.deco-drops-a {
+  top: 46%; left: 1.5%;
+  width: 62px; height: 42px;
+  color: var(--gold-soft);
+  opacity: .34;
+  transform: rotate(-12deg);
+}
+.deco-swirl-a {
+  bottom: 4%; right: 4%;
+  width: 62px; height: 62px;
+  color: var(--cream);
+  opacity: .18;
+}
+
+.deco-spark-b {
+  top: -14px; right: 44px;
+  width: 26px; height: 26px;
+  color: var(--gold); opacity: .9;
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+.deco-spark-c {
+  bottom: -10px; left: 38px;
+  width: 17px; height: 17px;
+  color: var(--gold); opacity: .7;
+  animation: twinkle 5.2s ease-in-out .8s infinite;
+}
+
+@media (max-width: 760px) {
+  .deco-steam-a, .deco-drops-a, .deco-swirl-a { display: none; }
+  /* On a phone the section is narrow enough that these two blobs meet
+     behind the deck and stack into a much darker field than either one
+     alone. Backed off so the pair still reads as two shapes. */
+  .blob-counter-a, .blob-counter-b { opacity: .18; }
+}
+
+
+/* ── Board ──────────────────────────────────────────────────────── */
+
+.board { overflow: hidden; }
+
+.deco-cup {
+  top: 8%; right: 4%;
+  width: 58px; height: 72px;
+  color: var(--green-ink);
+  opacity: .22;
+  transform: rotate(8deg);
+}
+.deco-wave {
+  bottom: 3%; left: 0;
+  width: min(100%, 460px); height: 22px;
+  color: var(--green);
+  opacity: .3;
+}
+
+/* Points from the note across to the button. Removed on small screens
+   where the two stack and the arrow would point at nothing. */
+.deco-arrow {
+  position: absolute;
+  left: 178px; top: -70px;
+  width: 68px; height: 50px;
+  color: var(--gold-ink);
+  opacity: .55;
+  transform: scaleX(-1) rotate(14deg);
+}
+@media (max-width: 900px) { .deco-cup { display: none; } }
+@media (max-width: 660px) { .deco-arrow { display: none; } }
+
+
+/* ── Visit ──────────────────────────────────────────────────────── */
+
+.visit { overflow: hidden; }
+
+/* Both sit in the outer margin, clear of the 1200px content column
+   (which starts at x≈112 on a 1425px viewport). */
+.deco-steam-b {
+  bottom: 11%; left: 2.5%;
+  width: 54px; height: 62px;
+  color: var(--gold);
+  opacity: .3;
+  animation: rise 7.5s var(--ease) infinite;
+}
+.deco-swirl-b {
+  top: 11%; right: 4%;
+  width: 54px; height: 54px;
+  color: var(--gold);
+  opacity: .18;
+}
+@media (max-width: 880px) { .deco-steam-b, .deco-swirl-b { display: none; } }
+
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+
+.site-foot { overflow: hidden; }
+
+.deco-bean-d {
+  top: 17%; right: 5%;
+  width: 40px; height: 27px;
+  color: var(--gold-soft);
+  opacity: .26;
+  transform: rotate(16deg);
+}
+.deco-drops-b {
+  bottom: 13%; left: 2.5%;
+  width: 54px; height: 36px;
+  color: var(--green);
+  opacity: .5;
+  transform: rotate(8deg);
+}
+@media (max-width: 760px) { .deco-bean-d, .deco-drops-b { display: none; } }
+
+
+/* ── Illustration motion ────────────────────────────────────────────
+   Slow, small, transform/opacity only. It should read as the page
+   breathing, never as something asking for attention.
+
+   Each bob instance re-declares its angle through --r, because the
+   keyframes set `transform` wholesale and would otherwise drop the
+   rotation the moment the animation starts.
+   ─────────────────────────────────────────────────────────────────── */
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0)    rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-9px) rotate(var(--r, 0deg)); }
+}
+@keyframes rise {
+  0%, 100% { transform: translateY(0)    scaleY(1);    opacity: .30; }
+  50%      { transform: translateY(-7px) scaleY(1.05); opacity: .16; }
+}
+@keyframes twinkle {
+  0%, 100% { transform: scale(1)   rotate(0deg);  opacity: .85; }
+  50%      { transform: scale(.72) rotate(28deg); opacity: .35; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Removed, not slowed. The seal stops where it stands and stays
+     legible; nothing else moves at all. */
+  .deco, .blob, .seal, .seal-text { animation: none !important; }
+}
+
+
+/* ── Dollar decoration ────────────────────────────────────────────── */
+
+.dollar { position: relative; }
+.dollar > .wrap { position: relative; z-index: 1; }
+
+.blob-dollar {
+  top: -26%; right: -10%;
+  width: min(40vw, 460px);
+  aspect-ratio: 200 / 172;
+  color: #7FBF86;
+  opacity: .16;
+  transform: rotate(16deg);
+}
+
+.deco-bean-e {
+  bottom: 12%; right: 8%;
+  width: 34px; height: 23px;
+  color: var(--gold-soft);
+  opacity: .38;
+  transform: rotate(-22deg);
+  animation: bob 8s var(--ease) infinite;
+}
+/* Kept clear of the equation column — parked next to an operator it
+   read as part of the maths. */
+.deco-spark-d {
+  top: 12%; right: 6%;
+  width: 18px; height: 18px;
+  color: var(--gold);
+  opacity: .6;
+  animation: twinkle 5s ease-in-out infinite;
+}
+
+@media (max-width: 760px) {
+  .deco-bean-e, .deco-spark-d { display: none; }
+}

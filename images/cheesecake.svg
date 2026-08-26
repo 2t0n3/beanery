@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" role="img" aria-label="Slice of baked cheesecake with caramel poured over it">
+<defs>
+  <linearGradient id="plate" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#FDFAF3"/><stop offset="1" stop-color="#E4DCCC"/>
+  </linearGradient>
+  <linearGradient id="fL" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#F2E0B7"/><stop offset="1" stop-color="#E3CB98"/>
+  </linearGradient>
+  <linearGradient id="fR" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#E4CE9E"/><stop offset="1" stop-color="#D2B77F"/>
+  </linearGradient>
+  <linearGradient id="car" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#DB9F45"/><stop offset="1" stop-color="#B87526"/>
+  </linearGradient>
+</defs>
+
+<!-- plate -->
+<ellipse cx="150" cy="228" rx="112" ry="34" fill="#26241F" opacity=".13"/>
+<ellipse cx="150" cy="220" rx="112" ry="34" fill="url(#plate)"/>
+<ellipse cx="150" cy="220" rx="92" ry="26" fill="none" stroke="#D6CDBA" stroke-width="2"/>
+
+<!-- slice: side faces -->
+<path d="M54 148 150 176v46L54 192Z" fill="url(#fL)"/>
+<path d="M150 176 246 148v44l-96 30Z" fill="url(#fR)"/>
+<!-- biscuit crust -->
+<path d="M54 176 150 204v18L54 192Z" fill="#A96B32"/>
+<path d="M150 204 246 176v16l-96 30Z" fill="#88521F"/>
+<path d="M66 184c10 6 22 8 32 14M104 194c12 5 22 9 32 15M172 204c14-5 26-10 38-16M216 190c8-4 14-6 20-9" stroke="#7A4A1D" stroke-opacity=".45" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+<!-- top face -->
+<path d="M150 100 246 148 150 176 54 148Z" fill="#F9EFD6"/>
+<path d="M150 100 246 148 150 176 54 148Z" fill="none" stroke="#E7D4A9" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M150 106 232 147 150 170 68 147Z" fill="none" stroke="#EFE0BE" stroke-width="2"/>
+
+<!-- caramel pour -->
+<path d="M150 124c26 5 46 10 66 16-22 12-44 24-66 36-22-12-44-24-66-36 20-6 40-11 66-16Z" fill="url(#car)"/>
+<path d="M164 158c2 14-2 22 0 34 8-6 12-14 14-26ZM136 156c-2 14 0 22-2 34-8-8-10-16-12-28Z" fill="url(#car)"/>
+<path d="M150 124c26 5 46 10 66 16-14 4-28 8-42 12-8-4-16-6-24-8-8 2-16 4-24 8-14-4-28-8-42-12 20-6 40-11 66-16Z" fill="#fff" opacity=".13"/>
+
+<!-- mint -->
+<g transform="translate(186 116) rotate(-20)">
+  <path d="M0 22C0 8 13-2 36-3 33 19 21 29 5 28Z" fill="#5D8250"/>
+  <path d="M3 25C11 17 23 9 34-2" fill="none" stroke="#EFEADC" stroke-opacity=".55" stroke-width="1.9" stroke-linecap="round"/>
+</g>
+
+<!-- crumbs -->
+<g fill="#A96B32" opacity=".65">
+  <ellipse cx="66" cy="228" rx="5" ry="3.2" transform="rotate(-18 66 228)"/>
+  <ellipse cx="84" cy="236" rx="3.6" ry="2.4" transform="rotate(12 84 236)"/>
+  <ellipse cx="232" cy="230" rx="4.4" ry="2.8" transform="rotate(22 232 230)"/>
+</g>
+</svg>

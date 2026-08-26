@@ -1,0 +1,21 @@
+# Backups / working copies — local only, never publish
+.bak/
+.bak-*/
+backups/
+menu/backups/
+*.bak
+*.bak[0-9]
+*.orig
+_originals*/
+_pre-normalize/
+
+# Archives
+*.zip
+
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+.vscode/
+.idea/

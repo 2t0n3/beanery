@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400">
+  <!--
+    White marble, generated rather than photographed — there is no
+    marble asset in this project, and an invented "photo" of a slab
+    would be a stock lie. This is honest procedural texture.
+
+    Two layers, which is what actually makes stone read as stone:
+      1. a soft cloudy body (fractalNoise, low frequency, very low
+         contrast) so the field is never a flat fill;
+      2. thin VEINS — straight paths pushed around by a displacement
+         map, because real veining is directional. Pure turbulence with
+         no skeleton reads as crumpled paper, not marble.
+
+    Kept almost white on purpose: this sits UNDER type everywhere it is
+    used, so its whole job is to be felt and not seen.
+  -->
+  <defs>
+    <filter id="cloud" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0016 0.0034"
+                    numOctaves="5" seed="11" result="n"/>
+      <feColorMatrix in="n" type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0.9 0 0 0 -0.28"/>
+    </filter>
+
+    <!-- The vein skeleton gets displaced by its own turbulence field.
+         scale is high (58) because subtle displacement leaves the paths
+         looking like drawn lines rather than mineral. -->
+    <filter id="vein" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0075"
+                    numOctaves="4" seed="23" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="58"
+                         xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.1"/>
+    </filter>
+
+    <filter id="vein-fine" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.013"
+                    numOctaves="3" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="34"
+                         xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="0.5"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="1400" fill="#FDFCFA"/>
+  <rect width="1400" height="1400" fill="#E9EBE7" filter="url(#cloud)" opacity=".16"/>
+
+  <!-- Major veins: one dominant diagonal family, as in a real cut slab. -->
+  <g filter="url(#vein)" fill="none" stroke="#DFE2DD" stroke-linecap="round">
+    <path d="M-120 340 C 260 250, 520 470, 900 350 S 1360 210, 1540 300" stroke-width="5" opacity="0.30"/>
+    <path d="M-120 620 C 300 540, 560 760, 960 630 S 1380 500, 1540 590" stroke-width="3.2" opacity="0.23"/>
+    <path d="M-120 980 C 240 900, 600 1120, 980 990 S 1360 860, 1540 950" stroke-width="4.2" opacity="0.21"/>
+    <path d="M180 -120 C 300 300, 240 640, 420 980 S 560 1340, 520 1520" stroke-width="2.6" opacity="0.17"/>
+    <path d="M1080 -120 C 1180 320, 1060 660, 1220 1000 S 1300 1360, 1260 1520" stroke-width="2.2" opacity="0.14"/>
+  </g>
+
+  <!-- Hairlines: what stops the major veins looking like three drawn strokes. -->
+  <g filter="url(#vein-fine)" fill="none" stroke="#E6E9E4" stroke-linecap="round">
+    <path d="M-100 430 C 320 380, 600 520, 980 440 S 1340 380, 1520 420" stroke-width="1.3" opacity="0.22"/>
+    <path d="M-100 760 C 340 700, 620 840, 1000 770 S 1360 700, 1520 750" stroke-width="1.1" opacity="0.19"/>
+    <path d="M-100 1140 C 300 1080, 640 1220, 1020 1150 S 1380 1080, 1520 1130" stroke-width="1.2" opacity="0.17"/>
+    <path d="M420 -100 C 520 340, 460 700, 640 1040 S 780 1400, 740 1520" stroke-width="1" opacity="0.14"/>
+    <path d="M820 -100 C 900 300, 820 640, 980 980 S 1060 1340, 1020 1520" stroke-width=".9" opacity="0.12"/>
+  </g>
+</svg>

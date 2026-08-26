@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50.7 63.3" width="50.7" height="63.3"
+     role="img" aria-label="Beanery">
+  <!--
+    BEANERY — the B monogram with the sprout.
+
+    Reconstructed as vector from the two raster references available:
+    the flat gold mark (101x87px) and the print on the cup in
+    images/hero-2.png. Both are low-resolution, so this is a faithful
+    REBUILD, not a pixel-exact vectorisation of the original artwork.
+    It was traced by overlaying this file on the reference at high zoom
+    and correcting until the outlines sat on top of one another.
+
+    If the original vector (.ai/.eps/.svg) ever turns up, prefer it and
+    delete this — a redraw is only ever as good as its reference.
+
+    Construction, so it can be edited sanely:
+      * Everything is ONE stroke weight (4.6 units). It is a monoline
+        mark; if you rescale, scale the stroke with it or it stops
+        being the same logo.
+      * The B has NO left stem. The short detached bar top-left is the
+        stem's remaining fragment, and the sprout occupies the space
+        where the rest of it would be. That gap is the whole idea of
+        the mark — do not "fix" it by closing the B.
+      * Caps are butt, not round: the arm, the bar and the bowl
+        terminals are all flat cuts in the original.
+
+    The coordinates are kept in the tracing space and shifted by the
+    group transform, so they still line up with the reference if anyone
+    needs to re-check the trace.
+  -->
+  <g transform="translate(-30.05 -16.4)"
+     fill="none" stroke="#D2A63A" stroke-width="4.6"
+     stroke-linecap="butt" stroke-linejoin="round">
+
+    <!-- B: top arm → top bowl → waist → lower bowl -->
+    <path d="M36 18.7 H57.8 C67.2 18.7 72.8 24 72.8 30.4 C72.8 36.9 67.2 42.6 57.8 42.6 H47
+             C59.4 42.6 78.4 46 78.4 59.9 C78.4 71.5 67.2 77.4 55 77.4 H50"/>
+
+    <!-- the stem's surviving fragment -->
+    <path d="M38.5 24 V46"/>
+
+    <!-- sprout stalk (starts at the top leaf's lower point) -->
+    <path d="M51.2 54.8 C49.8 61.5 48.4 68.6 47.4 76.4"/>
+
+    <!-- top leaf -->
+    <path d="M49.2 36.2 C44.8 41.6 44.6 48.6 51.2 54.8 C56 47.8 54.4 41.4 49.2 36.2 Z"/>
+
+    <!-- large left leaf -->
+    <path d="M32.8 49.8 C31 60.4 34.8 70.8 44.8 76.2 C44.4 64.8 40.2 55.4 32.8 49.8 Z"/>
+
+    <!-- right leaf -->
+    <path d="M61.2 55.8 C54.4 55.8 49.8 59.6 48.8 66.2 C56 66.2 60.2 62.2 61.2 55.8 Z"/>
+  </g>
+</svg>
