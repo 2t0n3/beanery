@@ -751,39 +751,65 @@ main {
 .cardrow__arrow {
   display: flex;
   position: absolute;
-  top: 80px;
+  /* centered on the 128px photo tile (track padding-top .2rem + half the tile) */
+  top: 67px;
   z-index: 3;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--green-deep);
+  /* fixed cream fill + dark-green ring, not swapped in dark mode — the tile
+     next to it is the same fixed cream, and the theme's near-black frame
+     tone would blend into the dark section behind it otherwise */
+  border: 2px solid #2E6B3B;
+  background: radial-gradient(circle at 33% 26%, #ffffff 0%, #FBF3DE 58%, #FBF3DE 100%);
+  color: #2E6B3B;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 10px 20px -12px rgba(40, 54, 24, .5);
-  transition: background .2s ease, color .2s ease, transform .2s ease, opacity .2s ease;
+  box-shadow:
+    0 10px 20px -12px rgba(40, 54, 24, .5),
+    0 0 0 3px rgba(46, 107, 59, .18),
+    inset 0 2px 2px rgba(255, 255, 255, .75),
+    inset 0 -3px 4px rgba(34, 51, 26, .3);
+  transition: background .2s ease, color .2s ease, transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+}
+
+.cardrow__arrow::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  width: 55%;
+  height: 32%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, 0));
+  pointer-events: none;
 }
 
 .cardrow__arrow svg {
+  position: relative;
+  z-index: 1;
   width: 17px;
   height: 17px;
 }
 
+/* the row bleeds via negative margin all the way to .sec's own edge, and
+   .sec clips (overflow: hidden) right at that edge — a negative offset here
+   pushed the circle past it and got sliced off. Keep it non-negative so the
+   whole ring stays inside .sec's bounds while still overlapping the card. */
 .cardrow__arrow--prev {
-  left: -4px;
+  left: 4px;
   transform: translateY(-50%) scaleX(-1);
 }
 
 .cardrow__arrow--next {
-  right: -4px;
+  right: 4px;
   transform: translateY(-50%);
 }
 
 .cardrow__arrow:hover {
-  background: var(--green);
-  color: var(--card);
+  background: #8fa25e66;
+  color: #2E6B3B;
 }
 
 .cardrow__arrow--prev:hover {
@@ -808,7 +834,8 @@ main {
 }
 
 .sec--feature .cardrow__arrow {
-  top: 86px;
+  /* centered on the larger 140px feature tile */
+  top: 73px;
 }
 
 .pcard {
@@ -821,45 +848,42 @@ main {
   gap: .5rem;
 }
 
-/* the photo tiles are gone, so the cutouts float directly on the stock.
-   a short hairline sitting in the flex gap does the separating instead —
-   deliberately shorter than the card so it reads as a divider, not a border */
-.pcard+.pcard::before {
-  content: "";
-  position: absolute;
-  left: calc(-.45rem - .5px);
-  top: 34px;
-  width: 1px;
-  height: 60px;
-  background: var(--line);
-  pointer-events: none;
-}
-
 /* card rise animation removed with the scroll reveal — cards render in place */
 
+/* fixed cream tile regardless of theme — a lit display slab for the photo
+   rather than a surface tied to --card, so it still pops against the dark
+   panel in dark mode instead of blending into it */
 .pcard__photo {
   position: relative;
   width: 128px;
   height: 128px;
-  background: none;
+  background: #FBF3DE;
+  border-radius: 18px;
+  box-shadow: 0 10px 20px -10px rgba(20, 28, 10, .4);
   display: grid;
   place-items: center;
-  transition: transform .32s cubic-bezier(.22, 1, .36, 1);
+  transition: transform .32s cubic-bezier(.22, 1, .36, 1), box-shadow .32s ease;
 }
 
-/* no tile to contain them any more, so the cutouts get the extra room the
-   frame used to take, and the drop-shadow does the grounding on its own */
 .pcard__photo img {
-  width: 94%;
-  height: 94%;
+  width: 84%;
+  height: 84%;
   object-fit: contain;
-  filter: drop-shadow(0 9px 11px rgba(40, 54, 24, .22));
+  filter: drop-shadow(0 7px 8px rgba(40, 54, 24, .18));
   transition: transform .32s cubic-bezier(.22, 1, .36, 1), filter .32s ease;
+}
+
+/* desserts only — a soft all-around gray glow instead of the grounded
+   directional shadow the other sections use. Stronger than a first pass
+   so it actually reads as different against the cream tile. */
+#desserts .pcard__photo img {
+  filter: drop-shadow(0 0 10px rgba(80, 80, 80, .55));
 }
 
 @media (hover:hover) and (pointer:fine) {
   .pcard:hover .pcard__photo {
     transform: translateY(-5px);
+    box-shadow: 0 16px 24px -10px rgba(20, 28, 10, .48);
   }
 
   .pcard:hover .pcard__photo img {
@@ -914,14 +938,6 @@ main {
 .sec--feature .pcard__photo {
   width: 140px;
   height: 140px;
-}
-
-/* the dark feature panel needs a light hairline, and a taller photo box
-   means the divider sits a little lower */
-.sec--feature .pcard+.pcard::before {
-  top: 40px;
-  height: 66px;
-  background: rgba(254, 250, 224, .2);
 }
 
 .list {
