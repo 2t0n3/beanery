@@ -818,6 +818,27 @@ main {
   pointer-events: none;
 }
 
+/* A touch screen never fires :hover, so the ring that makes this button
+   read as live would never show. Bake the hover treatment in as the
+   default there, scale included, which also gives a thumb a slightly
+   bigger target. :active is a class + pseudo-class so it still outranks
+   this — the press feedback survives. */
+@media (hover:none) {
+  .cardrow__arrow {
+    box-shadow:
+      0 10px 20px -12px rgba(20, 28, 10, .55),
+      0 0 0 3px rgba(96, 108, 56, .3);
+  }
+
+  .cardrow__arrow--prev {
+    transform: translateY(-50%) scaleX(-1) scale(1.08);
+  }
+
+  .cardrow__arrow--next {
+    transform: translateY(-50%) scale(1.08);
+  }
+}
+
 .sec--feature .cardrow__arrow {
   /* centered on the larger 140px feature tile */
   top: 73px;
@@ -908,50 +929,50 @@ main {
 }
 
 /* --- generated: per-image drink size normalisation --- */
-.pcard__photo img[src$="/amricano.png" i] { --fit-s: 0.936; }
-.pcard__photo img[src$="/berry-mojito.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/brew.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/cappuccino.png" i] { --fit-s: 1.206; }
-.pcard__photo img[src$="/caramel-latte.png" i] { --fit-s: 1.056; --fit-x: -0.056%; --fit-y: 0.889%; }
-.pcard__photo img[src$="/cfs-ciminin.png" i] { --fit-s: 0.931; }
-.pcard__photo img[src$="/cfs-pistachio.png" i] { --fit-s: 0.93; }
-.pcard__photo img[src$="/cfs-saffron.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/cfs-ube.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/cfs-vanilla.png" i] { --fit-s: 0.935; }
-.pcard__photo img[src$="/chocolate-milkshake.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/cortado.png" i] { --fit-s: 0.931; }
-.pcard__photo img[src$="/double-espresso.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/frappe-carmel.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/frappe-hazelnut.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/frappe.png" i] { --fit-s: 0.934; --fit-x: -0.056%; --fit-y: -0.167%; }
-.pcard__photo img[src$="/golden-lemon.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/iced-caramel-latte.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/iced-latte.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/iced-spanish-latte.png" i] { --fit-s: 0.935; }
-.pcard__photo img[src$="/icetea-passionfruit.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/latte.png" i] { --fit-s: 1.008; --fit-x: -0.167%; --fit-y: -0.222%; }
-.pcard__photo img[src$="/macchiato.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/match-strawberry.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/matcha-coconut.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/matcha-ube.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/matcha-vanilla.png" i] { --fit-s: 0.93; }
-.pcard__photo img[src$="/matcha.png" i] { --fit-s: 0.933; --fit-x: -0.167%; --fit-y: 0.111%; }
-.pcard__photo img[src$="/mocha.png" i] { --fit-s: 1.13; }
-.pcard__photo img[src$="/mojito.png" i] { --fit-s: 0.931; }
-.pcard__photo img[src$="/orange-juice.png" i] { --fit-s: 0.931; }
-.pcard__photo img[src$="/passion-fruit-iced-tea.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/peach-iced-tea.png" i] { --fit-s: 0.933; }
-.pcard__photo img[src$="/pistachio-milkshake.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/single-espresso.png" i] { --fit-s: 0.935; }
-.pcard__photo img[src$="/SM-BlackSesame.png" i] { --fit-s: 1.162; --fit-x: -1.757%; --fit-y: -1.984%; }
-.pcard__photo img[src$="/sm-saffron.png" i] { --fit-s: 0.934; }
-.pcard__photo img[src$="/sm-ube.png" i] { --fit-s: 0.9; --fit-x: -0.456%; --fit-y: -0.814%; }
-.pcard__photo img[src$="/spanish-latte.png" i] { --fit-s: 1.043; }
-.pcard__photo img[src$="/strawberry-lemonade.png" i] { --fit-s: 0.931; }
-.pcard__photo img[src$="/turkish-coffee.png" i] { --fit-s: 1.024; --fit-x: -0.056%; --fit-y: -0.167%; }
-.pcard__photo img[src$="/vanilla-latte.png" i] { --fit-s: 0.954; --fit-x: 0%; --fit-y: 0.944%; }
-.pcard__photo img[src$="/vanilla-milkshake.png" i] { --fit-s: 0.935; }
-.pcard__photo img[src$="/white-mocha.png" i] { --fit-s: 1.113; }
+.pcard__photo img[src$="/amricano.webp" i] { --fit-s: 0.936; }
+.pcard__photo img[src$="/berry-mojito.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/brew.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cappuccino.webp" i] { --fit-s: 1.206; }
+.pcard__photo img[src$="/caramel-latte.webp" i] { --fit-s: 1.056; --fit-x: -0.056%; --fit-y: 0.889%; }
+.pcard__photo img[src$="/cfs-ciminin.webp" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/cfs-pistachio.webp" i] { --fit-s: 0.93; }
+.pcard__photo img[src$="/cfs-saffron.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/cfs-ube.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cfs-vanilla.webp" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/chocolate-milkshake.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cortado.webp" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/double-espresso.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe-carmel.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe-hazelnut.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe.webp" i] { --fit-s: 0.934; --fit-x: -0.056%; --fit-y: -0.167%; }
+.pcard__photo img[src$="/golden-lemon.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-caramel-latte.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-latte.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-spanish-latte.webp" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/icetea-passionfruit.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/latte.webp" i] { --fit-s: 1.008; --fit-x: -0.167%; --fit-y: -0.222%; }
+.pcard__photo img[src$="/macchiato.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/match-strawberry.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/matcha-coconut.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/matcha-ube.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/matcha-vanilla.webp" i] { --fit-s: 0.93; }
+.pcard__photo img[src$="/matcha.webp" i] { --fit-s: 0.933; --fit-x: -0.167%; --fit-y: 0.111%; }
+.pcard__photo img[src$="/mocha.webp" i] { --fit-s: 1.13; }
+.pcard__photo img[src$="/mojito.webp" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/orange-juice.webp" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/passion-fruit-iced-tea.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/peach-iced-tea.webp" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/pistachio-milkshake.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/single-espresso.webp" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/SM-BlackSesame.webp" i] { --fit-s: 1.162; --fit-x: -1.757%; --fit-y: -1.984%; }
+.pcard__photo img[src$="/sm-saffron.webp" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/sm-ube.webp" i] { --fit-s: 0.9; --fit-x: -0.456%; --fit-y: -0.814%; }
+.pcard__photo img[src$="/spanish-latte.webp" i] { --fit-s: 1.043; }
+.pcard__photo img[src$="/strawberry-lemonade.webp" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/turkish-coffee.webp" i] { --fit-s: 1.024; --fit-x: -0.056%; --fit-y: -0.167%; }
+.pcard__photo img[src$="/vanilla-latte.webp" i] { --fit-s: 0.954; --fit-x: 0%; --fit-y: 0.944%; }
+.pcard__photo img[src$="/vanilla-milkshake.webp" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/white-mocha.webp" i] { --fit-s: 1.113; }
 /* --- end generated --- */
 
 /* desserts only — a soft all-around gray glow instead of the grounded
@@ -1873,12 +1894,27 @@ body.cart-open {
   height: 15px;
 }
 
+/* No indent by default. On a ~320px phone the 52px indent, plus the
+   nowrap unit price, the stepper and the line total, is wider than the
+   row: the line total gets clipped and the list picks up a horizontal
+   scrollbar. The indent only aligns this row under the name above it —
+   decorative, and a small screen has no width to spend on it. Wrapping
+   is the backstop for anything narrower still. */
 .cart__item__bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: .6rem;
-  padding-left: calc(42px + .65rem);
+  flex-wrap: wrap;
+  gap: .45rem .6rem;
+  min-width: 0;
+}
+
+/* wide enough that the indent fits alongside everything else */
+@media (min-width:400px) {
+  .cart__item__bottom {
+    flex-wrap: nowrap;
+    padding-left: calc(42px + .65rem);
+  }
 }
 
 .cart__item__unit {
@@ -2204,4 +2240,69 @@ body.cart-open {
   body::after {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Accessibility repairs — hit areas and focus
+   ========================================================================== */
+
+/* Every control here is built on `all: unset`, which also strips the focus
+   ring, so a keyboard user has no idea where they are. Put a visible one
+   back. :focus-visible only, so a mouse click or a thumb tap never shows it
+   and nothing about the design changes. Each selector is written out rather
+   than grouped under :where() — :where() contributes no specificity and
+   would lose to the `all: unset` that caused the problem. */
+.search__clear:focus-visible,
+.mhead__back:focus-visible,
+.cardrow__arrow:focus-visible,
+.pcard__add:focus-visible,
+.item__add:focus-visible,
+.cart__close:focus-visible,
+.cart__remove:focus-visible,
+.cart__qty button:focus-visible {
+  outline: 3px solid #283618;
+  outline-offset: 2px;
+}
+
+/* the two green-filled controls — dark green on green would disappear, so
+   these take the cream side of the same fixed pair */
+.cartbar:focus-visible,
+.cart__send:focus-visible {
+  outline: 3px solid #FEFAE0;
+  outline-offset: 3px;
+}
+
+/* Hit-area expansion. These buttons are drawn small on purpose, so grow what
+   a thumb can hit rather than what the eye sees: the visible ring stays
+   23-34px, only the tappable box reaches 44px. Nothing moves or resizes.
+   .pcard__add is deliberately absent from the `position: relative` list —
+   it is already position: absolute, so it is a containing block, and
+   relative would drop it out of its corner. */
+.item__add,
+.cart__remove,
+.cart__close,
+.cart__qty button {
+  position: relative;
+}
+
+.pcard__add::after,
+.item__add::after,
+.cart__remove::after,
+.cart__close::after,
+.cart__qty button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  /* square, not a 50% circle: a round pad of the same width loses the
+     corners, and a diagonal thumb press 22px out lands outside it */
+}
+
+/* the stepper's minus and plus sit ~47px apart centre to centre; keep their
+   pads under that so they cannot overlap and steal each other's taps */
+.cart__qty button::after {
+  width: 40px;
 }
