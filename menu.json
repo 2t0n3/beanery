@@ -3,7 +3,7 @@
   "currency": "IQD",
   "imageBase": "assets/",
   "footerNote": "Prices in Iraqi dinar. Please tell your barista about any allergies before ordering. Menu changes with the season.",
-  "headerImage": "header-cup.jpg",
+  "headerImage": "header-cup.webp",
   "hero": {
     "eyebrow": "Signature · whisked to order",
     "title": "Cold Foam Signatures",
@@ -20,11 +20,11 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Espresso", "price": 1500, "image": "single-espresso.png" },
-        { "name": "Double Espresso", "price": 3000, "image": "double-espresso.png" },
-        { "name": "Macchiato", "price": 3000, "image": "macchiato.png" },
-        { "name": "Cortado", "price": 4500, "image": "cortado.png" },
-        { "name": "Turkish Coffee", "price": 1500, "image": "turkish-coffee.png" }
+        { "name": "Espresso", "price": 1500, "image": "single-espresso.webp" },
+        { "name": "Double Espresso", "price": 3000, "image": "double-espresso.webp" },
+        { "name": "Macchiato", "price": 3000, "image": "macchiato.webp" },
+        { "name": "Cortado", "price": 4500, "image": "cortado.webp" },
+        { "name": "Turkish Coffee", "price": 1500, "image": "turkish-coffee.webp" }
       ]
     },
     {
@@ -35,13 +35,13 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Cappuccino", "price": 4500, "image": "cappuccino.png" },
-        { "name": "Latte", "price": 4500, "image": "latte.png" },
-        { "name": "Spanish Latte", "price": 4000, "image": "spanish-latte.png" },
-        { "name": "Vanilla Latte", "price": 4000, "image": "vanilla-latte.png" },
-        { "name": "Caramel Latte", "price": 4000, "image": "caramel-latte.png" },
-        { "name": "Mocha", "price": 4000, "image": "mocha.png" },
-        { "name": "White Mocha", "price": 4000, "image": "white-mocha.png" }
+        { "name": "Cappuccino", "price": 4500, "image": "cappuccino.webp" },
+        { "name": "Latte", "price": 4500, "image": "latte.webp" },
+        { "name": "Spanish Latte", "price": 4000, "image": "spanish-latte.webp" },
+        { "name": "Vanilla Latte", "price": 4000, "image": "vanilla-latte.webp" },
+        { "name": "Caramel Latte", "price": 4000, "image": "caramel-latte.webp" },
+        { "name": "Mocha", "price": 4000, "image": "mocha.webp" },
+        { "name": "White Mocha", "price": 4000, "image": "white-mocha.webp" }
       ]
     },
     {
@@ -52,9 +52,9 @@
       "layout": "cards",
       "note": "Beans rotate. Ask what's on the grinder today.",
       "items": [
-        { "name": "V60", "price": 4000, "image": "brew.png" },
-        { "name": "Chemex", "price": 4500, "image": "brew.png", "placeholder": true, "needsPhoto": "Chemex is an hourglass vessel, visually distinct from the V60 cone currently borrowed here." },
-        { "name": "Cold Brew", "price": 4000, "image": "amricano.png", "placeholder": true, "needsPhoto": "Borrowing the iced americano. Cold brew should read darker and served without crema." }
+        { "name": "V60", "price": 4000, "image": "brew.webp" },
+        { "name": "Chemex", "price": 4500, "image": "brew.webp", "placeholder": true, "needsPhoto": "Chemex is an hourglass vessel, visually distinct from the V60 cone currently borrowed here." },
+        { "name": "Cold Brew", "price": 4000, "image": "amricano.webp", "placeholder": true, "needsPhoto": "Borrowing the iced americano. Cold brew should read darker and served without crema." }
       ]
     },
     {
@@ -65,10 +65,10 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Iced Americano", "price": 4000, "image": "amricano.png" },
-        { "name": "Iced Latte", "price": 4500, "image": "iced-latte.png" },
-        { "name": "Iced Spanish Latte", "price": 4500, "image": "iced-spanish-latte.png" },
-        { "name": "Iced Caramel Latte", "price": 4500, "image": "iced-caramel-latte.png" }
+        { "name": "Iced Americano", "price": 4000, "image": "amricano.webp" },
+        { "name": "Iced Latte", "price": 4500, "image": "iced-latte.webp" },
+        { "name": "Iced Spanish Latte", "price": 4500, "image": "iced-spanish-latte.webp" },
+        { "name": "Iced Caramel Latte", "price": 4500, "image": "iced-caramel-latte.webp" }
       ]
     },
     {
@@ -79,12 +79,12 @@
       "layout": "cards",
       "note": "Whisked to order. Hot or iced, same price.",
       "items": [
-        { "name": "Classic Matcha", "price": 6000, "image": "matcha.png", "placeholder": true, "needsPhoto": "This is the iced version in a clear cup. Classic Matcha should be served hot in a ceramic mug." },
-        { "name": "Iced Matcha", "price": 6000, "image": "matcha.png" },
-        { "name": "Vanilla Matcha", "price": 6000, "image": "matcha-vanilla.png" },
-        { "name": "Strawberry Matcha", "price": 6000, "image": "match-strawberry.png" },
-        { "name": "Coconut Matcha", "price": 6000, "image": "matcha-coconut.png" },
-        { "name": "Ube Matcha", "price": 6000, "image": "matcha-ube.png" }
+        { "name": "Classic Matcha", "price": 6000, "image": "matcha.webp", "placeholder": true, "needsPhoto": "This is the iced version in a clear cup. Classic Matcha should be served hot in a ceramic mug." },
+        { "name": "Iced Matcha", "price": 6000, "image": "matcha.webp" },
+        { "name": "Vanilla Matcha", "price": 6000, "image": "matcha-vanilla.webp" },
+        { "name": "Strawberry Matcha", "price": 6000, "image": "match-strawberry.webp" },
+        { "name": "Coconut Matcha", "price": 6000, "image": "matcha-coconut.webp" },
+        { "name": "Ube Matcha", "price": 6000, "image": "matcha-ube.webp" }
       ]
     },
     {
@@ -98,11 +98,11 @@
       "flatPriceLabel": "Any flavour",
       "note": null,
       "items": [
-        { "name": "Saffron", "desc": "Steeped saffron milk, one thread on top", "image": "cfs-saffron.png" },
-        { "name": "Pistachio", "desc": "Roasted pistachio, salted foam", "image": "cfs-pistachio.png" },
-        { "name": "Ube", "desc": "Purple yam, coconut edge", "image": "cfs-ube.png" },
-        { "name": "Vanilla Sweet Cream", "desc": "Real vanilla, heavy cream", "image": "cfs-vanilla.png" },
-        { "name": "Brown Sugar Cinnamon", "desc": "Dark sugar syrup, cinnamon dust", "image": "cfs-ciminin.png" }
+        { "name": "Saffron", "desc": "Steeped saffron milk, one thread on top", "image": "cfs-saffron.webp" },
+        { "name": "Pistachio", "desc": "Roasted pistachio, salted foam", "image": "cfs-pistachio.webp" },
+        { "name": "Ube", "desc": "Purple yam, coconut edge", "image": "cfs-ube.webp" },
+        { "name": "Vanilla Sweet Cream", "desc": "Real vanilla, heavy cream", "image": "cfs-vanilla.webp" },
+        { "name": "Brown Sugar Cinnamon", "desc": "Dark sugar syrup, cinnamon dust", "image": "cfs-ciminin.webp" }
       ]
     },
     {
@@ -113,8 +113,8 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Hazelnut Frappé", "price": 5000, "image": "frappe-hazelnut.png" },
-        { "name": "Caramel Frappé", "price": 5000, "image": "frappe-carmel.png" }
+        { "name": "Hazelnut Frappé", "price": 5000, "image": "frappe-hazelnut.webp" },
+        { "name": "Caramel Frappé", "price": 5000, "image": "frappe-carmel.webp" }
       ]
     },
     {
@@ -125,9 +125,9 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Chocolate Milkshake", "price": 5000, "image": "chocolate-milkshake.png" },
-        { "name": "Pistachio Milkshake", "price": 5000, "image": "pistachio-milkshake.png" },
-        { "name": "Vanilla Milkshake", "price": 5000, "image": "vanilla-milkshake.png" }
+        { "name": "Chocolate Milkshake", "price": 5000, "image": "chocolate-milkshake.webp" },
+        { "name": "Pistachio Milkshake", "price": 5000, "image": "pistachio-milkshake.webp" },
+        { "name": "Vanilla Milkshake", "price": 5000, "image": "vanilla-milkshake.webp" }
       ]
     },
     {
@@ -138,9 +138,9 @@
       "layout": "cards",
       "note": "No coffee. Served cold.",
       "items": [
-        { "name": "Saffron Milk", "price": 6000, "image": "sm-saffron.png" },
-        { "name": "Ube Milk", "price": 6000, "image": "sm-ube.png" },
-        { "name": "Black Sesame Milk", "price": 6000, "image": "sm-blacksesame.png" }
+        { "name": "Saffron Milk", "price": 6000, "image": "sm-saffron.webp" },
+        { "name": "Ube Milk", "price": 6000, "image": "sm-ube.webp" },
+        { "name": "Black Sesame Milk", "price": 6000, "image": "sm-blacksesame.webp" }
       ]
     },
     {
@@ -151,14 +151,14 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Passion Fruit Lemonade", "price": 5000, "image": "passion-fruit-iced-tea.png", "check": "Filename says iced tea but the shot is the bright yellow lemonade. Rename the file or swap with icetea-passionfruit.png." },
-        { "name": "Strawberry Lemonade", "price": 5000, "image": "strawberry-lemonade.png" },
-        { "name": "Peach Iced Tea", "price": 5000, "image": "peach-iced-tea.png" },
-        { "name": "Passion Fruit Iced Tea", "price": 5000, "image": "icetea-passionfruit.png", "check": "Paired with the item above; the amber tea-coloured shot." },
-        { "name": "Classic Mojito", "price": 5000, "image": "mojito.png" },
-        { "name": "Berry Mojito", "price": 5000, "image": "berry-mojito.png" },
-        { "name": "Fresh Orange Juice", "price": 5000, "image": "orange-juice.png" },
-        { "name": "Golden Lemon", "price": 5000, "image": "golden-lemon.png", "badge": "New" }
+        { "name": "Passion Fruit Lemonade", "price": 5000, "image": "passion-fruit-iced-tea.webp", "check": "Filename says iced tea but the shot is the bright yellow lemonade. Rename the file or swap with icetea-passionfruit.png." },
+        { "name": "Strawberry Lemonade", "price": 5000, "image": "strawberry-lemonade.webp" },
+        { "name": "Peach Iced Tea", "price": 5000, "image": "peach-iced-tea.webp" },
+        { "name": "Passion Fruit Iced Tea", "price": 5000, "image": "icetea-passionfruit.webp", "check": "Paired with the item above; the amber tea-coloured shot." },
+        { "name": "Classic Mojito", "price": 5000, "image": "mojito.webp" },
+        { "name": "Berry Mojito", "price": 5000, "image": "berry-mojito.webp" },
+        { "name": "Fresh Orange Juice", "price": 5000, "image": "orange-juice.webp" },
+        { "name": "Golden Lemon", "price": 5000, "image": "golden-lemon.webp", "badge": "New" }
       ]
     },
     {
@@ -169,14 +169,14 @@
       "layout": "cards",
       "note": null,
       "items": [
-        { "name": "Cheesecake", "price": 5000, "image": "cheesecake.png" },
-        { "name": "Chocolate Cake", "price": 6000, "image": "chocolate-cake.png" },
-        { "name": "Brownie", "price": 4000, "image": "brownie.png" },
-        { "name": "Cookies", "price": 3000, "image": "cookies.png" },
-        { "name": "Croissant", "price": 3000, "image": "croissant.png" },
-        { "name": "Tiramisu", "price": 5000, "image": "tiramisu.png" },
-        { "name": "Trileçe", "price": 5000, "image": "trilece.png" },
-        { "name": "Ice Cream Scoop", "price": 1500, "image": "ice-cream-scoop.png" }
+        { "name": "Cheesecake", "price": 5000, "image": "cheesecake.webp" },
+        { "name": "Chocolate Cake", "price": 6000, "image": "chocolate-cake.webp" },
+        { "name": "Brownie", "price": 4000, "image": "brownie.webp" },
+        { "name": "Cookies", "price": 3000, "image": "cookies.webp" },
+        { "name": "Croissant", "price": 3000, "image": "croissant.webp" },
+        { "name": "Tiramisu", "price": 5000, "image": "tiramisu.webp" },
+        { "name": "Trileçe", "price": 5000, "image": "trilece.webp" },
+        { "name": "Ice Cream Scoop", "price": 1500, "image": "ice-cream-scoop.webp" }
       ]
     },
     {

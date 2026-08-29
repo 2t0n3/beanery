@@ -13,13 +13,14 @@
    loose, wobbly, hand-drawn. It never means foliage. No leaves, no
    branches, no plants anywhere in this stylesheet.
 
-   Every hex below was SAMPLED from a real asset, not invented:
-     --green      brand-info/color.jpeg   (the actual painted wall)
-     --olive      images/hero.png         (that photo's own lit ground)
-     --char       brand-info/vibe.png     (the real interior walls)
-     --gold       brand-info/menu-*.jpeg  (the printed board / signage)
+   Every hex below was SAMPLED from a real photo, not invented:
+     --green      the actual painted wall
+     --olive      images/hero.png — that photo's own lit ground
+     --char       the real interior walls
+     --gold       the printed board / signage
 
-   Re-sample if the assets are replaced.
+   The reference photos these were sampled from were context only and are
+   no longer in the repo; --olive is the one still checkable in-tree.
    ═══════════════════════════════════════════════════════════════════ */
 
 

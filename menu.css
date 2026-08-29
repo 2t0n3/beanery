@@ -35,7 +35,7 @@
   /* sticky category bar height */
 
   /* the shop's marble — same crop and tone as the landing page */
-  --marble: url("../brand-info/vibe-2.jpeg");
+  --marble: url("images/marble.webp");
   --marble-crop: 42% 60%;
   --marble-zoom: 300% auto;
 }

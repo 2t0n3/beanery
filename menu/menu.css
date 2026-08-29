@@ -35,9 +35,9 @@
   /* sticky category bar height */
 
   /* the shop's marble — same crop and tone as the landing page */
-  --marble: url("../brand-info/vibe-2.jpeg");
-  --marble-crop: 42% 60%;
-  --marble-zoom: 300% auto;
+  --marble: url("marble.webp");
+  --marble-crop: center;
+  --marble-zoom: cover;
 }
 
 /* dark: a café at night, phone at full brightness in someone's face */
