@@ -1,7 +1,7 @@
 /* ==========================================================================
    BEANERY — QR menu interactivity
-   Three independent behaviours: live search, sticky category nav that
-   tracks scroll position, and a back-to-top button.
+   Independent behaviours: live search, sticky category nav that tracks
+   scroll position, and the cart.
    ========================================================================== */
 
 (() => {
@@ -17,7 +17,6 @@
   const sections    = $$('.sec');
   const catLinks    = $$('.cat');
   const catsTrack   = $('.cats__track');
-  const totop       = $('#totop');
 
   /* ---------- search ---------- */
 
@@ -137,17 +136,280 @@
     updateArrows();
   });
 
-  /* ---------- back to top ---------- */
+  /* ---------- cart ---------- */
 
-  function toggleTotop() {
-    totop.hidden = window.scrollY < window.innerHeight * 0.6;
+  const CART_KEY = 'beanery_cart_v1';
+
+  // Where the finished order gets POSTed. Wiring this up to the real POS
+  // (endpoint, auth, register/table selection, retries) is the backend's
+  // job — this file's responsibility ends at handing the order JSON off.
+  const POS_ENDPOINT = '/pos/order';
+
+  const cartBtn        = $('#cartBtn');
+  const cartBadge      = $('#cartBadge');
+  const cartBarLabel   = $('#cartBarLabel');
+  const cartBarTotalEl = $('#cartBarTotal');
+  const cartOverlay    = $('#cartOverlay');
+  const cartPanel      = $('#cartPanel');
+  const cartCloseBtn   = $('#cartClose');
+  const cartTable      = $('#cartTable');
+  const cartTableNum   = $('#cartTableNum');
+  const cartCountLabel = $('#cartCountLabel');
+  const cartEmpty      = $('#cartEmpty');
+  const cartListEl     = $('#cartList');
+  const cartFoot       = $('#cartFoot');
+  const cartTotalEl    = $('#cartTotal');
+  const cartSend       = $('#cartSend');
+  const cartSendLabel  = $('#cartSendLabel');
+  const cartStatus     = $('#cartStatus');
+
+  const SEND_LABEL_DEFAULT = cartSendLabel.textContent;
+
+  // the table this menu was opened for — printed on the QR code as
+  // e.g. /?table=12 — read once; it doesn't change for the life of the page
+  const TABLE_NUMBER = new URLSearchParams(window.location.search).get('table');
+  if (TABLE_NUMBER) {
+    cartTableNum.textContent = TABLE_NUMBER;
+    cartTable.hidden = false;
   }
-  window.addEventListener('scroll', toggleTotop, { passive: true });
-  toggleTotop();
 
-  totop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const parsePrice = (text) => {
+    const digits = (text || '').replace(/[^\d]/g, '');
+    return digits ? parseInt(digits, 10) : NaN;
+  };
+
+  // strips the "New" ribbon (and anything else non-text) out of a name
+  // before it becomes a cart line / aria-label
+  const cleanName = (el) => {
+    const clone = el.cloneNode(true);
+    $$('.new', clone).forEach((b) => b.remove());
+    return clone.textContent.trim();
+  };
+
+  const fmt = (n) => n.toLocaleString('en-US');
+
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+  } catch {
+    cart = [];
+  }
+
+  function saveCart() {
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    } catch {
+      /* private browsing / storage disabled — cart just won't survive a reload */
+    }
+  }
+
+  function bumpCartBar() {
+    cartBtn.classList.remove('cartbar--bump');
+    void cartBtn.offsetWidth; // restart the animation on back-to-back adds
+    cartBtn.classList.add('cartbar--bump');
+  }
+
+  function addToCart(name, price, img) {
+    const line = cart.find((l) => l.name === name && l.price === price);
+    if (line) line.qty += 1;
+    else cart.push({ name, price, qty: 1, img: img || null });
+    saveCart();
+    renderCart();
+    bumpCartBar();
+  }
+
+  function setQty(index, qty) {
+    if (qty <= 0) cart.splice(index, 1);
+    else cart[index].qty = qty;
+    saveCart();
+    renderCart();
+  }
+
+  const cartCount = () => cart.reduce((n, l) => n + l.qty, 0);
+  const cartTotal = () => cart.reduce((sum, l) => sum + l.price * l.qty, 0);
+
+  function renderCart() {
+    const count = cartCount();
+    const total = cartTotal();
+    const isEmpty = cart.length === 0;
+
+    cartBadge.hidden = isEmpty;
+    cartBadge.textContent = String(count);
+
+    cartBarLabel.textContent = isEmpty ? 'Tap to order' : 'View order';
+    cartBarTotalEl.hidden = isEmpty;
+    cartBarTotalEl.textContent = `${fmt(total)} IQD`;
+    cartBtn.classList.toggle('cartbar--invite', isEmpty);
+
+    cartEmpty.hidden = cart.length > 0;
+    cartFoot.hidden = cart.length === 0;
+    cartCountLabel.textContent = cart.length === 0
+      ? 'Your cart is empty'
+      : `${count} ${count === 1 ? 'item' : 'items'}`;
+
+    cartListEl.innerHTML = '';
+    cart.forEach((line, i) => {
+      const li = document.createElement('li');
+      li.className = 'cart__item';
+      const media = line.img
+        ? `<img src="${line.img}" alt="" loading="lazy">`
+        : `<span class="cart__item__avatar">${line.name.trim().charAt(0).toUpperCase()}</span>`;
+      li.innerHTML = `
+        <div class="cart__item__top">
+          <span class="cart__item__media">${media}</span>
+          <span class="cart__item__name">${line.name}</span>
+          <button type="button" class="cart__remove" aria-label="Remove ${line.name}">
+            <svg aria-hidden="true"><use href="#i-trash" /></svg>
+          </button>
+        </div>
+        <div class="cart__item__bottom">
+          <span class="cart__item__unit">${fmt(line.price)} IQD each</span>
+          <div class="cart__item__right">
+            <div class="cart__qty">
+              <button type="button" class="cart__qty--minus" aria-label="One fewer ${line.name}">
+                <svg aria-hidden="true"><use href="#i-minus" /></svg>
+              </button>
+              <span>${line.qty}</span>
+              <button type="button" class="cart__qty--plus" aria-label="One more ${line.name}">
+                <svg aria-hidden="true"><use href="#i-plus" /></svg>
+              </button>
+            </div>
+            <span class="cart__line">${fmt(line.price * line.qty)}</span>
+          </div>
+        </div>`;
+      $('.cart__qty--minus', li).addEventListener('click', () => setQty(i, cart[i].qty - 1));
+      $('.cart__qty--plus', li).addEventListener('click', () => setQty(i, cart[i].qty + 1));
+      $('.cart__remove', li).addEventListener('click', () => setQty(i, 0));
+      cartListEl.appendChild(li);
+    });
+
+    cartTotalEl.firstChild.textContent = `${fmt(total)} `;
+  }
+
+  // wire an "add" button onto every priced card/item already on the page —
+  // reads the price (and photo, for cards) straight off what's printed, so
+  // new menu items only ever need their HTML, never a JS change
+  $$('.pcard').forEach((card) => {
+    const nameEl = $('.pcard__name', card);
+    if (!nameEl) return;
+
+    const priceEl = $('.pcard__price', card);
+    let price = priceEl ? parsePrice(priceEl.textContent) : NaN;
+
+    if (Number.isNaN(price)) {
+      // signature cards share one price, set once on the section itself
+      const featureSec = card.closest('.sec--feature');
+      const sharedPrice = featureSec ? $('.feature__price b', featureSec) : null;
+      if (sharedPrice) price = parsePrice(sharedPrice.textContent);
+    }
+    if (Number.isNaN(price)) return;
+
+    const name = cleanName(nameEl);
+    const photoEl = $('.pcard__photo', card);
+    const img = photoEl?.querySelector('img')?.getAttribute('src') || null;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pcard__add';
+    btn.setAttribute('aria-label', `Add ${name} to your order`);
+    btn.innerHTML = '<svg aria-hidden="true"><use href="#i-plus" /></svg>';
+    btn.addEventListener('click', () => addToCart(name, price, img));
+    // anchored to the photo tile itself (not the whole card) so it can
+    // never end up sitting over the name/price text below it
+    (photoEl || card).appendChild(btn);
   });
+
+  $$('.item').forEach((row) => {
+    const nameEl = $('.item__name', row);
+    const priceEl = $('.item__price', row);
+    if (!nameEl || !priceEl) return;
+
+    const price = parsePrice(priceEl.textContent);
+    if (Number.isNaN(price)) return; // blank/TBD price — nothing to ring up yet
+
+    const name = cleanName(nameEl);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'item__add';
+    btn.setAttribute('aria-label', `Add ${name} to your order`);
+    btn.innerHTML = '<svg aria-hidden="true"><use href="#i-plus" /></svg>';
+    btn.addEventListener('click', () => addToCart(name, price));
+    row.appendChild(btn);
+  });
+
+  function openCart() {
+    cartOverlay.hidden = false;
+    cartPanel.hidden = false;
+    document.body.classList.add('cart-open');
+    requestAnimationFrame(() => {
+      cartOverlay.classList.add('is-open');
+      cartPanel.classList.add('is-open');
+    });
+  }
+  function closeCart() {
+    cartOverlay.classList.remove('is-open');
+    cartPanel.classList.remove('is-open');
+    document.body.classList.remove('cart-open');
+    window.setTimeout(() => {
+      cartOverlay.hidden = true;
+      cartPanel.hidden = true;
+    }, 300);
+  }
+
+  cartBtn.addEventListener('click', openCart);
+  cartCloseBtn.addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !cartPanel.hidden) closeCart();
+  });
+
+  /* Sends the finished order to the POS. This is the one place that talks
+     to the POS — everything after it (accepting the order, printing a
+     ticket, the register, etc.) is the backend's side to build. Point
+     POS_ENDPOINT at the real integration URL when it exists. */
+  async function sendOrderToPOS(order) {
+    const res = await fetch(POS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error(`POS responded ${res.status}`);
+    return res.json().catch(() => ({}));
+  }
+
+  cartSend.addEventListener('click', async () => {
+    if (cart.length === 0) return;
+
+    const order = {
+      table: TABLE_NUMBER || null,
+      items: cart.map((l) => ({ name: l.name, price: l.price, qty: l.qty })),
+      total: cartTotal(),
+      currency: 'IQD',
+      createdAt: new Date().toISOString(),
+    };
+
+    cartSend.disabled = true;
+    cartSendLabel.textContent = 'Placing your order…';
+    cartStatus.textContent = '';
+    cartStatus.className = 'cart__status';
+
+    try {
+      await sendOrderToPOS(order);
+      cartStatus.textContent = 'Order placed — the counter has it.';
+      cartStatus.className = 'cart__status cart__status--ok';
+      cart = [];
+      saveCart();
+      renderCart();
+      window.setTimeout(closeCart, 1400);
+    } catch (err) {
+      cartStatus.textContent = "Couldn't place the order — try again.";
+      cartStatus.className = 'cart__status cart__status--error';
+    } finally {
+      cartSend.disabled = false;
+      cartSendLabel.textContent = SEND_LABEL_DEFAULT;
+    }
+  });
+
+  renderCart();
 
   /* ---------- header photo: double-tap to swap the shot ----------
      Not persisted on purpose: header-cup.jpg is the default, so every

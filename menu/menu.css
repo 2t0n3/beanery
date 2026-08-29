@@ -463,10 +463,11 @@ body::after {
   height: 34px;
   flex: 0 0 auto;
   margin-right: .35rem;
-  border: 0;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 2.5px solid #606C38;
   border-radius: 50%;
-  background: rgba(88, 123, 76, .16);
-  color: var(--green);
+  background: #FEFAE0;
+  color: #283618;
   display: grid;
   place-items: center;
   cursor: pointer;
@@ -757,33 +758,16 @@ main {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  /* fixed cream fill + dark-green ring, not swapped in dark mode — the tile
-     next to it is the same fixed cream, and the theme's near-black frame
-     tone would blend into the dark section behind it otherwise */
-  border: 2px solid #2E6B3B;
-  background: radial-gradient(circle at 33% 26%, #ffffff 0%, #FBF3DE 58%, #FBF3DE 100%);
-  color: #2E6B3B;
+  /* fixed beige fill + green ring, not swapped in dark mode — reads
+     as the same physical button in either theme rather than shifting */
+  border: 3px solid #606C38;
+  background: #FEFAE0;
+  color: #283618;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow:
-    0 10px 20px -12px rgba(40, 54, 24, .5),
-    0 0 0 3px rgba(46, 107, 59, .18),
-    inset 0 2px 2px rgba(255, 255, 255, .75),
-    inset 0 -3px 4px rgba(34, 51, 26, .3);
-  transition: background .2s ease, color .2s ease, transform .2s ease, opacity .2s ease, box-shadow .2s ease;
-}
-
-.cardrow__arrow::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 7px;
-  width: 55%;
-  height: 32%;
-  border-radius: 50%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, 0));
-  pointer-events: none;
+  box-shadow: 0 10px 20px -12px rgba(20, 28, 10, .45);
+  transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
 }
 
 .cardrow__arrow svg {
@@ -808,8 +792,9 @@ main {
 }
 
 .cardrow__arrow:hover {
-  background: #8fa25e66;
-  color: #2E6B3B;
+  box-shadow:
+    0 10px 20px -12px rgba(20, 28, 10, .55),
+    0 0 0 3px rgba(96, 108, 56, .3);
 }
 
 .cardrow__arrow--prev:hover {
@@ -836,6 +821,17 @@ main {
 .sec--feature .cardrow__arrow {
   /* centered on the larger 140px feature tile */
   top: 73px;
+  /* a soft cream halo so the beige button still pops against the
+     feature panel's own green backdrop */
+  box-shadow:
+    0 10px 20px -12px rgba(0, 0, 0, .6),
+    0 0 0 3px rgba(254, 250, 224, .35);
+}
+
+.sec--feature .cardrow__arrow:hover {
+  box-shadow:
+    0 10px 20px -12px rgba(0, 0, 0, .6),
+    0 0 0 4px rgba(254, 250, 224, .5);
 }
 
 .pcard {
@@ -850,6 +846,25 @@ main {
 
 /* card rise animation removed with the scroll reveal — cards render in place */
 
+/* hairline divider sitting in the .9rem track gap so adjacent cards read as
+   separate items. Inset top/bottom so it stays a quiet tick, not a full rule. */
+.pcard:not(.is-hidden)+.pcard:not(.is-hidden)::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  bottom: 20%;
+  left: calc(-.45rem - .5px);
+  width: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+
+/* the feature panel is dark in both themes, so the light-theme --line
+   would all but vanish against it */
+.sec--feature .pcard:not(.is-hidden)+.pcard:not(.is-hidden)::before {
+  background: rgba(254, 250, 224, .16);
+}
+
 /* fixed cream tile regardless of theme — a lit display slab for the photo
    rather than a surface tied to --card, so it still pops against the dark
    panel in dark mode instead of blending into it */
@@ -857,21 +872,87 @@ main {
   position: relative;
   width: 128px;
   height: 128px;
-  background: #FBF3DE;
+  background: #ffffff00;
   border-radius: 18px;
-  box-shadow: 0 10px 20px -10px rgba(20, 28, 10, .4);
+  box-shadow: none;
   display: grid;
   place-items: center;
   transition: transform .32s cubic-bezier(.22, 1, .36, 1), box-shadow .32s ease;
 }
 
+/* Every drink is normalised to one on-screen height. The source PNGs are all
+   900x900, but the product inside fills wildly different fractions of that
+   canvas — a wide cappuccino mug covers 66% of the height, a tall frappe cup
+   86% — so object-fit alone left the mugs looking stunted next to the cups.
+   --fit-s is a per-image correction measured from each PNG's alpha bounding
+   box; the generated block below carries the numbers. #desserts is excluded
+   on purpose: those items are flat by nature and normalise on width instead. */
 .pcard__photo img {
+  --fit-s: 1;
+  --fit-x: 0%;
+  --fit-y: 0%;
+  --fit-hover: 1;
   width: 84%;
-  height: 84%;
+  /* an explicit square box, not height: 84% — a percentage height here has no
+     definite containing block to resolve against, so the two non-square PNGs
+     (sm-ube, sm-blacksesame) fell back to their own aspect ratio and rendered
+     ~26% oversized, spilling past the tile */
+  aspect-ratio: 1;
+  height: auto;
   object-fit: contain;
+  /* translate runs before scale, so --fit-x/y stay in unscaled box units and
+     re-centre the artwork's bounding box on the tile */
+  transform: scale(calc(var(--fit-s) * var(--fit-hover))) translate(var(--fit-x), var(--fit-y));
   filter: drop-shadow(0 7px 8px rgba(40, 54, 24, .18));
   transition: transform .32s cubic-bezier(.22, 1, .36, 1), filter .32s ease;
 }
+
+/* --- generated: per-image drink size normalisation --- */
+.pcard__photo img[src$="/amricano.png" i] { --fit-s: 0.936; }
+.pcard__photo img[src$="/berry-mojito.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/brew.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cappuccino.png" i] { --fit-s: 1.206; }
+.pcard__photo img[src$="/caramel-latte.png" i] { --fit-s: 1.056; --fit-x: -0.056%; --fit-y: 0.889%; }
+.pcard__photo img[src$="/cfs-ciminin.png" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/cfs-pistachio.png" i] { --fit-s: 0.93; }
+.pcard__photo img[src$="/cfs-saffron.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/cfs-ube.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cfs-vanilla.png" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/chocolate-milkshake.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/cortado.png" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/double-espresso.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe-carmel.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe-hazelnut.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/frappe.png" i] { --fit-s: 0.934; --fit-x: -0.056%; --fit-y: -0.167%; }
+.pcard__photo img[src$="/golden-lemon.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-caramel-latte.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-latte.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/iced-spanish-latte.png" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/icetea-passionfruit.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/latte.png" i] { --fit-s: 1.008; --fit-x: -0.167%; --fit-y: -0.222%; }
+.pcard__photo img[src$="/macchiato.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/match-strawberry.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/matcha-coconut.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/matcha-ube.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/matcha-vanilla.png" i] { --fit-s: 0.93; }
+.pcard__photo img[src$="/matcha.png" i] { --fit-s: 0.933; --fit-x: -0.167%; --fit-y: 0.111%; }
+.pcard__photo img[src$="/mocha.png" i] { --fit-s: 1.13; }
+.pcard__photo img[src$="/mojito.png" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/orange-juice.png" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/passion-fruit-iced-tea.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/peach-iced-tea.png" i] { --fit-s: 0.933; }
+.pcard__photo img[src$="/pistachio-milkshake.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/single-espresso.png" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/SM-BlackSesame.png" i] { --fit-s: 1.162; --fit-x: -1.757%; --fit-y: -1.984%; }
+.pcard__photo img[src$="/sm-saffron.png" i] { --fit-s: 0.934; }
+.pcard__photo img[src$="/sm-ube.png" i] { --fit-s: 0.9; --fit-x: -0.456%; --fit-y: -0.814%; }
+.pcard__photo img[src$="/spanish-latte.png" i] { --fit-s: 1.043; }
+.pcard__photo img[src$="/strawberry-lemonade.png" i] { --fit-s: 0.931; }
+.pcard__photo img[src$="/turkish-coffee.png" i] { --fit-s: 1.024; --fit-x: -0.056%; --fit-y: -0.167%; }
+.pcard__photo img[src$="/vanilla-latte.png" i] { --fit-s: 0.954; --fit-x: 0%; --fit-y: 0.944%; }
+.pcard__photo img[src$="/vanilla-milkshake.png" i] { --fit-s: 0.935; }
+.pcard__photo img[src$="/white-mocha.png" i] { --fit-s: 1.113; }
+/* --- end generated --- */
 
 /* desserts only — a soft all-around gray glow instead of the grounded
    directional shadow the other sections use. Stronger than a first pass
@@ -886,8 +967,10 @@ main {
     box-shadow: 0 16px 24px -10px rgba(20, 28, 10, .48);
   }
 
+  /* nudges the shared --fit-hover factor so the hover lift multiplies the
+     per-image normalisation instead of overwriting its transform */
   .pcard:hover .pcard__photo img {
-    transform: scale(1.05);
+    --fit-hover: 1.05;
     filter: drop-shadow(0 14px 16px rgba(40, 54, 24, .3));
   }
 }
@@ -950,7 +1033,7 @@ main {
   display: flex;
   align-items: baseline;
   gap: .45rem;
-  padding: .6rem 0;
+  padding: .6rem 0 .6rem .55rem;
   border-bottom: 1px solid transparent;
   border-radius: 9px;
 }
@@ -966,7 +1049,7 @@ main {
 
   .item:hover {
     background: rgba(96, 108, 56, .08);
-    padding-left: .45rem;
+    padding-left: 1rem;
   }
 
   .sec--feature .item:hover {
@@ -1315,30 +1398,639 @@ main {
   }
 }
 
-.totop {
-  position: fixed;
-  right: 14px;
-  z-index: 30;
-  bottom: calc(14px + env(safe-area-inset-bottom));
-  width: 46px;
-  height: 46px;
-  border: 0;
-  border-radius: 50%;
+/* ==========================================================================
+   cart: per-item add buttons + order-summary bar + order panel
+   ========================================================================== */
+
+.pcard__add,
+.item__add {
+  all: unset;
+  box-sizing: border-box;
   cursor: pointer;
-  background: var(--green);
-  color: #FBF7EF;
   display: grid;
   place-items: center;
-  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, .7);
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 2.5px solid #606C38;
+  background: #FEFAE0;
+  color: #283618;
+  border-radius: 50%;
+  box-shadow: 0 6px 14px -5px rgba(20, 28, 10, .5);
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.totop svg {
-  width: 20px;
-  height: 20px;
+.pcard__add svg,
+.item__add svg {
+  width: 13px;
+  height: 13px;
 }
 
-.totop[hidden] {
+/* sits inset from the photo's own corner (never negative) — a negative
+   offset used to poke past .cardrow__track's overflow-x:auto, which clips
+   its own top edge, and got sliced flat */
+.pcard__add {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 27px;
+  height: 27px;
+  z-index: 2;
+}
+
+.item__add {
+  align-self: center;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  margin-left: .5rem;
+}
+
+.pcard__add:active,
+.item__add:active {
+  transform: scale(.88);
+}
+
+@media (hover:hover) and (pointer:fine) {
+
+  .pcard__add:hover,
+  .item__add:hover {
+    transform: scale(1.08);
+  }
+}
+
+/* a priced item's slot is filled in later — a dashed rule instead of a
+   number keeps the row from looking broken until someone sets the price */
+.item__price--tbd {
+  display: inline-block;
+  min-width: 46px;
+  height: .9em;
+  border-bottom: 1.5px dashed var(--dotline);
+}
+
+/* body scroll is locked while the sheet is open — a stray background
+   scroll under a modal reads as broken, not polished */
+body.cart-open {
+  overflow: hidden;
+}
+
+/* ---------- order launcher: always visible, invites the first tap ---------- */
+
+.cartbar {
+  all: unset;
+  box-sizing: border-box;
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .4rem 1.05rem .4rem .4rem;
+  border-radius: 999px;
+  cursor: pointer;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 3px solid #606C38;
+  background: #FEFAE0;
+  box-shadow: 0 14px 30px -12px rgba(20, 28, 10, .5);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.cartbar:active {
+  transform: scale(.96);
+}
+
+.cartbar--bump {
+  animation: cartbar-bump .32s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes cartbar-bump {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* a slow, quiet pulse while the cart is empty — the nudge that says
+   "you can order right here", not an alarm */
+.cartbar--invite {
+  animation: cartbar-invite 2.6s ease-in-out infinite;
+}
+
+@keyframes cartbar-invite {
+  0%, 100% {
+    box-shadow:
+      0 14px 30px -12px rgba(20, 28, 10, .6),
+      0 0 0 0 rgba(96, 108, 56, .55);
+  }
+  50% {
+    box-shadow:
+      0 14px 30px -12px rgba(20, 28, 10, .6),
+      0 0 0 11px rgba(96, 108, 56, 0);
+  }
+}
+
+.cartbar__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(96, 108, 56, .16);
+  color: #283618;
+  flex: 0 0 auto;
+}
+
+.cartbar__icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cartbar__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #283618;
+  color: #FBF7EF;
+  font-family: var(--board);
+  font-size: .64rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 2px #606C38;
+}
+
+.cartbar__badge[hidden] {
   display: none;
+}
+
+.cartbar__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.cartbar__label {
+  font-family: var(--ui);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #606C38;
+}
+
+.cartbar__total {
+  font-family: var(--board);
+  font-size: .92rem;
+  font-weight: 500;
+  color: #283618;
+  font-variant-numeric: tabular-nums;
+}
+
+.cartbar__total[hidden] {
+  display: none;
+}
+
+/* ---------- overlay + popup ---------- */
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(16, 21, 10, .55);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.cart-overlay.is-open {
+  opacity: 1;
+}
+
+.cart-overlay[hidden] {
+  display: none;
+}
+
+/* the cart itself: a centred pop-up card, not a sheet — a gradient ring
+   (transparent border painted from a border-box layer) instead of a flat
+   stroke, plus a bouncy "pop" easing so opening it feels playful */
+.cart {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  width: min(92vw, 430px);
+  max-height: min(85vh, 660px);
+  display: flex;
+  flex-direction: column;
+  border: 2.5px solid transparent;
+  border-radius: 28px;
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(135deg, var(--green) 0%, var(--card) 50%, var(--green-deep) 100%) border-box;
+  box-shadow: 0 32px 70px -20px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .04);
+  padding: 1.1rem var(--pad) calc(1.1rem + env(safe-area-inset-bottom));
+  transform: translate(-50%, -50%) scale(.88);
+  opacity: 0;
+  transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), opacity .22s ease;
+}
+
+.cart.is-open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.cart[hidden] {
+  display: none;
+}
+
+.cart__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .8rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: .2rem;
+}
+
+.cart__head__row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.cart__head__text h2 {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.cart__table {
+  flex: 0 0 auto;
+  font-family: var(--ui);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--green-ink);
+  background: var(--line);
+  padding: .2rem .55rem;
+  border-radius: 999px;
+}
+
+.cart__table[hidden] {
+  display: none;
+}
+
+.cart__table b {
+  font-family: var(--board);
+  font-weight: 700;
+}
+
+.cart__head__sub {
+  font-family: var(--ui);
+  font-size: .8rem;
+  color: var(--ink-faint);
+  margin-top: .15rem;
+}
+
+.cart__close {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 2.5px solid #606C38;
+  color: #283618;
+  background: #FEFAE0;
+  flex: 0 0 auto;
+  transition: transform .15s ease;
+}
+
+.cart__close:hover {
+  transform: scale(1.06);
+}
+
+.cart__close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cart__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .3rem;
+  padding: 2.6rem 1rem 2.8rem;
+  color: var(--ink-faint);
+}
+
+.cart__empty[hidden] {
+  display: none;
+}
+
+.cart__empty__ico {
+  width: 40px;
+  height: 40px;
+  color: var(--ink-faint);
+  opacity: .5;
+  margin-bottom: .5rem;
+}
+
+.cart__empty p {
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: .95rem;
+  color: var(--ink-soft);
+}
+
+.cart__empty span {
+  font-size: .82rem;
+  max-width: 22em;
+}
+
+.cart__empty span b {
+  color: var(--green-ink);
+}
+
+.cart__list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  margin: .3rem 0;
+  padding: 0 2px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--green) transparent;
+}
+
+/* WebKit/Chromium/Edge — replaces the OS's default arrow-and-track
+   scrollbar with a slim themed thumb so it doesn't look like a stray
+   system control dropped onto the card */
+.cart__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cart__list::-webkit-scrollbar-thumb {
+  background: var(--green);
+  border-radius: 999px;
+}
+
+.cart__item {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: .7rem .7rem .75rem;
+  border-radius: 16px;
+  background: var(--bg);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .cart__item:hover {
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+}
+
+.cart__item__top {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+}
+
+.cart__item__media {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.cart__item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+}
+
+.cart__item__avatar {
+  font-family: var(--board);
+  font-weight: 500;
+  font-size: .95rem;
+  color: var(--green-ink);
+}
+
+.cart__item__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-weight: 600;
+  font-size: .88rem;
+  color: var(--ink);
+}
+
+.cart__remove {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 2.5px solid #606C38;
+  color: #283618;
+  background: #FEFAE0;
+  flex: 0 0 auto;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.cart__remove:hover {
+  transform: scale(1.08);
+}
+
+.cart__remove svg {
+  width: 15px;
+  height: 15px;
+}
+
+.cart__item__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+  padding-left: calc(42px + .65rem);
+}
+
+.cart__item__unit {
+  font-family: var(--board);
+  font-size: .74rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.cart__item__right {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  margin-left: auto;
+}
+
+.cart__qty {
+  display: flex;
+  align-items: center;
+  gap: .1rem;
+  background: var(--line);
+  border-radius: 999px;
+  padding: .15rem;
+}
+
+.cart__qty button {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 3px solid #606C38;
+  background: #FEFAE0;
+  color: #283618;
+  transition: transform .15s ease;
+}
+
+.cart__qty button:hover {
+  transform: scale(1.1);
+}
+
+.cart__qty button svg {
+  width: 12px;
+  height: 12px;
+}
+
+.cart__qty span {
+  min-width: 1.6em;
+  text-align: center;
+  font-family: var(--board);
+  font-weight: 600;
+  font-size: .84rem;
+}
+
+.cart__line {
+  flex: 0 0 auto;
+  min-width: 58px;
+  text-align: right;
+  font-family: var(--board);
+  font-weight: 600;
+  font-size: .86rem;
+  color: var(--green-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__foot {
+  padding-top: .3rem;
+  flex: 0 0 auto;
+}
+
+.cart__foot[hidden] {
+  display: none;
+}
+
+.cart__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: .8rem .2rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--ui);
+}
+
+.cart__total span {
+  color: var(--ink-soft);
+  font-size: .88rem;
+}
+
+.cart__total b {
+  font-family: var(--board);
+  font-size: 1.4rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__total b small {
+  font-size: .68rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+  margin-left: .15rem;
+}
+
+.cart__send {
+  all: unset;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  cursor: pointer;
+  /* fixed beige + green, not swapped in dark mode — see .cardrow__arrow */
+  border: 3px solid #606C38;
+  background: #FEFAE0;
+  color: #283618;
+  font-family: var(--ui);
+  font-weight: 600;
+  font-size: .95rem;
+  letter-spacing: .01em;
+  padding: .95rem;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px -12px rgba(40, 54, 24, .55);
+  transition: opacity .2s ease, transform .15s ease;
+}
+
+.cart__send:active {
+  transform: scale(.98);
+}
+
+.cart__send:disabled {
+  opacity: .65;
+  cursor: default;
+  transform: none;
+}
+
+.cart__status {
+  margin-top: .35rem;
+  font-size: .8rem;
+  text-align: center;
+  min-height: 1.2em;
+  color: var(--ink-soft);
+}
+
+.cart__status--error {
+  color: #B3261E;
+}
+
+.cart__status--ok {
+  color: var(--green-ink);
+  font-weight: 600;
 }
 
 /* ==========================================================================
@@ -1404,7 +2096,11 @@ main {
 
   .cats,
   .search,
-  .totop,
+  .cartbar,
+  .cart,
+  .cart-overlay,
+  .pcard__add,
+  .item__add,
   .mhead__back,
   .mfoot__link,
   .mhead__deco,
@@ -1477,6 +2173,10 @@ main {
   .cardrow__track {
     flex-wrap: wrap;
     overflow: visible;
+  }
+
+  .pcard:not(.is-hidden)+.pcard:not(.is-hidden)::before {
+    display: none;
   }
 
   .mfoot {
