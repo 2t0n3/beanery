@@ -3,804 +3,769 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Menu — Beanery Coffee &amp; More</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beanery Cafe — Ankawa, Erbil</title>
   <meta name="description"
-    content="The full Beanery menu: espresso, manual brew, matcha, cold foam signatures, milkshakes, fresh drinks and desserts. Prices in Iraqi dinar.">
-  <meta name="theme-color" content="#283618" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#171F0F" media="(prefers-color-scheme: dark)">
+    content="Coffee bar in Ankawa, Erbil. Espresso, manual brew, matcha and the saffron cold foam. Forty-six drinks, eight desserts, open every day 7am–12am.">
+  <link rel="canonical" href="https://beanery.iq/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Beanery Cafe">
+  <meta property="og:description" content="A flavor that lifts your mood. Every day. Ankawa, Erbil.">
+  <meta property="og:image" content="https://beanery.iq/images/hero-3.png">
+  <!-- og:image stays PNG on purpose: several scrapers still do not decode webp. -->
+  <meta property="og:url" content="https://beanery.iq/">
+  <meta name="theme-color" content="#5FA366">
+
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Oswald:wght@300;400;500;600&family=Playfair+Display:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="menu.css?v=6">
+  <link rel="preload" as="image" href="images/hero-3-trim.webp" type="image/webp" fetchpriority="high">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,800&family=Manrope:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="styles.css?v=4">
+
+  <!-- Runs during parse. Reveal animations are scoped to .js, so with
+     JavaScript off every element is simply visible rather than stuck
+     at opacity 0. -->
+  <script>document.documentElement.className += " js";</script>
 </head>
 
 <body>
+  <a class="skip" href="#counter">Skip to the drinks</a>
 
-  <svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
-    <!-- the real Beanery monogram — geometry from logo.svg, kept in its
-         tracing space via the group transform so it stays comparable to the
-         source file. stroke is currentColor (not logo.svg's hardcoded gold)
-         so it keeps inheriting --gold-soft and the dark-mode palette. -->
-    <symbol id="i-b" viewBox="0 0 50.7 63.3">
-      <g transform="translate(-30.05 -16.4)" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="butt"
-        stroke-linejoin="round">
-        <path d="M36 18.7 H57.8 C67.2 18.7 72.8 24 72.8 30.4 C72.8 36.9 67.2 42.6 57.8 42.6 H47
-             C59.4 42.6 78.4 46 78.4 59.9 C78.4 71.5 67.2 77.4 55 77.4 H50" />
-        <path d="M38.5 24 V46" />
-        <path d="M51.2 54.8 C49.8 61.5 48.4 68.6 47.4 76.4" />
-        <path d="M49.2 36.2 C44.8 41.6 44.6 48.6 51.2 54.8 C56 47.8 54.4 41.4 49.2 36.2 Z" />
-        <path d="M32.8 49.8 C31 60.4 34.8 70.8 44.8 76.2 C44.4 64.8 40.2 55.4 32.8 49.8 Z" />
-        <path d="M61.2 55.8 C54.4 55.8 49.8 59.6 48.8 66.2 C56 66.2 60.2 62.2 61.2 55.8 Z" />
-      </g>
-    </symbol>
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-      stroke-linecap="round">
-      <circle cx="11" cy="11" r="6.5" />
-      <path d="m16 16 4 4" />
-    </symbol>
-    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <path d="m7 7 10 10M17 7 7 17" />
-    </symbol>
-    <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M12 19V6M6 11.5 12 5.5l6 6" />
-    </symbol>
-    <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M19 12H6M11 5.5 5 12l6 6.5" />
-    </symbol>
-    <symbol id="i-bean" viewBox="0 0 48 40">
-      <path d="M24 4c9 0 15 7.5 15 16S33 36 24 36 9 28.5 9 20 15 4 24 4Z" fill="none" stroke="currentColor"
-        stroke-width="2" />
-      <path d="M24 8c-5 3-7 7-6 12s5 9 10 9" fill="none" stroke="currentColor" stroke-width="1.6"
-        stroke-linecap="round" />
-    </symbol>
-    <symbol id="i-drop" viewBox="0 0 24 28">
-      <path d="M12 2c5 7 8 12.5 8 16.5A8 8 0 1 1 4 18.5C4 14.5 7 9 12 2Z" fill="none" stroke="currentColor"
-        stroke-width="2" stroke-linejoin="round" />
-    </symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M8 16 16 8M9 8h7v7" />
-    </symbol>
-    <symbol id="i-cat-espresso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 9h13v4.5A4.5 4.5 0 0 1 12.5 18h-4A4.5 4.5 0 0 1 4 13.5V9Z" />
-      <path d="M17 10.6h1.1a2 2 0 0 1 0 4H17" />
-      <path d="M3 20.2h14" />
-      <path d="M9 4.2c-.8.9-.8 1.6 0 2.5M12.4 4.2c-.8.9-.8 1.6 0 2.5" />
-    </symbol>
-    <symbol id="i-cat-mug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M5 8h11v6.5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V8Z" />
-      <path d="M16 10.2h1.4a2.3 2.3 0 0 1 0 4.6H16" />
-      <path d="M9.2 4c-1 1-1 1.8 0 2.8" />
-    </symbol>
-    <symbol id="i-cat-brew" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 6h12l-3.4 5.8H9.4L6 6Z" />
-      <path d="M8.2 11.8h7.6v2.4a3.8 3.8 0 0 1-3.8 3.8 3.8 3.8 0 0 1-3.8-3.8v-2.4Z" />
-    </symbol>
-    <symbol id="i-cat-iced" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 7h12l-1.2 12.3a2 2 0 0 1-2 1.7H9.2a2 2 0 0 1-2-1.7L6 7Z" />
-      <path d="M15 4l1 5" />
-      <path d="M9.3 12h5.4M9.3 15.2h5.4" />
-    </symbol>
-    <symbol id="i-cat-matcha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 3c5 1 8 5 8 9-4 1-9-1-9-6 0-1 .3-2 1-3Z" />
-      <path d="M12 21V9" />
-    </symbol>
-    <symbol id="i-cat-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linejoin="round">
-      <path d="M12 3l1.8 5.6L19 10l-5.2 1.4L12 17l-1.8-5.6L5 10l5.2-1.4L12 3Z" />
-    </symbol>
-    <symbol id="i-cat-frappe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M7 8h10l-1.3 10.2a2 2 0 0 1-2 1.7h-3.4a2 2 0 0 1-2-1.7L7 8Z" />
-      <path d="M9 8c0-2.1 1.3-3.4 3-3.4S15 5.9 15 8" />
-      <path d="M16.2 3l1 5.6" />
-    </symbol>
-    <symbol id="i-cat-shake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M8 9h8l-1 10.4a1.6 1.6 0 0 1-1.6 1.5h-2.8A1.6 1.6 0 0 1 9 19.4L8 9Z" />
-      <path d="M7.4 9c0-2.4 2-3.8 4.6-3.8S16.6 6.6 16.6 9" />
-      <circle cx="12" cy="4.3" r="1.1" fill="currentColor" stroke="none" />
-    </symbol>
-    <symbol id="i-cat-citrus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round">
-      <circle cx="12" cy="13" r="7" />
-      <path d="M12 6v14M6.6 9.5l10.8 7M6.6 16.5l10.8-7" />
-    </symbol>
-    <symbol id="i-cat-cake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 20 12 6l8 14H4Z" />
-      <path d="M4 20h16" />
-      <circle cx="12" cy="9.6" r="1.1" fill="currentColor" stroke="none" />
-    </symbol>
-    <symbol id="i-cat-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round">
-      <circle cx="12" cy="12" r="8.5" />
-      <path d="M12 8v8M8 12h8" />
-    </symbol>
-    <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="M4 20C4 10 11 4 20 4c0 9-6 16-16 16Z" />
-      <path d="M6 18C10 14 13 11 18 6" />
-    </symbol>
-    <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-      stroke-linejoin="round">
-      <path d="m9 6 6 6-6 6" />
-    </symbol>
+  <!-- ═══════════════════════════════════════════════════════════
+     ILLUSTRATION SPRITE
+
+     Every mark is line art: fill:none, stroke:currentColor. That way
+     ONE symbol works on cream, on green and on charcoal — the colour
+     comes from whatever `color` the instance inherits, and there is no
+     second copy of anything to keep in sync.
+
+     Motifs are drawn from the drink itself — beans, steam, splashes,
+     cups, swirls. No leaves, no branches, no foliage.
+
+     NOTE FOR MINIFICATION: `viewBox`, `preserveAspectRatio`,
+     `stroke-linecap` and `vector-effect` are case-sensitive. An HTML
+     minifier run with caseSensitive:false will silently destroy every
+     symbol below with no error. Keep caseSensitive:true.
+     ═══════════════════════════════════════════════════════════ -->
+  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+
+      <!-- The crease runs along the LONG axis. An offset crease reads as an
+         eye at 30px, which is where these actually get used. -->
+      <symbol id="i-bean" viewBox="0 0 44 30">
+        <path d="M22 2.5c11 0 19.5 5.4 19.5 12.5S33 27.5 22 27.5 2.5 22.1 2.5 15 11 2.5 22 2.5Z" />
+        <path d="M7 15q7.5-6 15 0t15 0" />
+      </symbol>
+
+      <symbol id="i-steam" viewBox="0 0 46 52">
+        <path d="M11 48c-5-7-1-11 1.5-15S16 25 11 18s0-13 0-13" />
+        <path d="M25 48c-5-7-1-11 1.5-15S30 25 25 18s0-13 0-13" />
+        <path d="M39 44c-4-6-.8-9 1.2-12.4S42.5 24 38.5 18.4" />
+      </symbol>
+
+      <symbol id="i-squiggle" viewBox="0 0 180 18">
+        <path d="M3 12c14-11 27 5 41-4s27 9 41-1 27 8 41-1 12 0 12 0" />
+      </symbol>
+
+      <symbol id="i-arrow" viewBox="0 0 92 66">
+        <path d="M4 8c22 3 46 14 60 32 4 5 7 11 8 17" />
+        <path d="M56 55c6 .6 11 1.5 16 2.4M74 38c-1 7-1.4 13.4-2 19.4" />
+      </symbol>
+
+      <symbol id="i-spark" viewBox="0 0 26 26">
+        <path
+          d="M13 1c1.4 6.4 5.2 10.2 11.6 11.6C18.2 14 14.4 17.8 13 24.2 11.6 17.8 7.8 14 1.4 12.6 7.8 11.2 11.6 7.4 13 1Z" />
+      </symbol>
+
+      <symbol id="i-drops" viewBox="0 0 64 44">
+        <path d="M12 6c3.6 4.4 5.4 7.4 5.4 9.8A5.4 5.4 0 0 1 6.6 15.8C6.6 13.4 8.4 10.4 12 6Z" />
+        <path d="M34 20c2.8 3.4 4.2 5.8 4.2 7.6a4.2 4.2 0 0 1-8.4 0c0-1.8 1.4-4.2 4.2-7.6Z" />
+        <path d="M54 4c2.2 2.7 3.3 4.6 3.3 6a3.3 3.3 0 0 1-6.6 0c0-1.4 1.1-3.3 3.3-6Z" />
+      </symbol>
+
+      <symbol id="i-cup" viewBox="0 0 60 74">
+        <path d="M9 22h42l-4.6 44a6 6 0 0 1-6 5.4H19.6a6 6 0 0 1-6-5.4Z" />
+        <path d="M5 14h50v8H5z" />
+        <path d="M16 36h28" />
+      </symbol>
+
+      <symbol id="i-swirl" viewBox="0 0 56 56">
+        <path d="M28 50c12 0 22-10 22-22S40 6 28 6 10 15 10 26s7 16 16 16 13-6 13-13-4-11-9-11-8 3-8 7 2 6 5 6" />
+      </symbol>
+
+      <symbol id="i-wave" viewBox="0 0 200 24">
+        <path d="M0 12c16.7-14 33.3 14 50 0s33.3-14 50 0 33.3 14 50 0 33.3-14 50 0" />
+      </symbol>
+
+      <!-- The lobed cloud. This is the page's structural shape, and it is
+         the one thing border-radius genuinely cannot draw: a CSS blob is
+         a four-corner superellipse, so at any real size it flattens back
+         into a circle. Six lobes is what makes it read as DRAWN.
+
+         Filled, not stroked — so it opts out of the .deco stroke rules
+         via .blobfill below. Still no foliage: this is the same shape
+         language as the splash and the crema swirl. -->
+      <symbol id="i-blob" viewBox="0 0 200 172">
+        <path
+          d="M100 8c30 0 45 15 50 37 25 0 45 17 45 40s-20 40-45 40c-5 22-22 39-50 39s-45-17-50-39C25 125 5 108 5 85s20-40 45-40C55 23 70 8 100 8Z" />
+      </symbol>
+
+      <!-- THE LOGO. Rebuilt as vector from the flat gold mark and the
+         print on the cup in hero-3.png — see images/logo.svg for the
+         full note on how it was traced and what to do if the original
+         vector file ever turns up.
+
+         This is the ONE place foliage is allowed on this page. It is
+         not decoration, it is the client's actual monogram; the "no
+         leaves" rule governs the illustration layer, not the mark.
+
+         Monoline: every stroke is 4.6 units in this viewBox. Weight is
+         set on the INSTANCE (.brand-logo) like every other symbol here,
+         because a <use> clone cannot be reached by descendant
+         selectors. -->
+      <symbol id="i-logo" viewBox="0 0 50.7 63.3">
+        <g transform="translate(-30.05 -16.4)">
+          <path d="M36 18.7 H57.8 C67.2 18.7 72.8 24 72.8 30.4 C72.8 36.9 67.2 42.6 57.8 42.6 H47
+                 C59.4 42.6 78.4 46 78.4 59.9 C78.4 71.5 67.2 77.4 55 77.4 H50" />
+          <path d="M38.5 24 V46" />
+          <path d="M51.2 54.8 C49.8 61.5 48.4 68.6 47.4 76.4" />
+          <path d="M49.2 36.2 C44.8 41.6 44.6 48.6 51.2 54.8 C56 47.8 54.4 41.4 49.2 36.2 Z" />
+          <path d="M32.8 49.8 C31 60.4 34.8 70.8 44.8 76.2 C44.4 64.8 40.2 55.4 32.8 49.8 Z" />
+          <path d="M61.2 55.8 C54.4 55.8 49.8 59.6 48.8 66.2 C56 66.2 60.2 62.2 61.2 55.8 Z" />
+        </g>
+      </symbol>
+
+      <!-- The logo's SILHOUETTE — the B as one solid shape, same
+         proportions and same waist notch as #i-logo, but closed down
+         the left where the real mark leaves its stem out.
+
+         It exists because the real mark is MONOLINE: masking an image
+         to those thin strokes leaves slivers, not a picture. Filling
+         the letter gives a shape big enough to hold a map while still
+         reading as the B. Currently used for the watermark above the
+         footer.
+
+         It was also the map's mask for a while. That is gone: a solid B
+         at map size stopped reading as a letter, and every shaped mask
+         clipped Google's attribution logo out of the bottom-left
+         corner, which their terms require stay visible. The map is a
+         plain rectangle now. -->
+
+      <symbol id="i-logo-solid" viewBox="0 0 50.7 63.3">
+        <path d="M5.95 0 H27.9 C38.5 0 45.1 5.9 45.1 13.9 C45.1 21.8 38.5 27.6 27.9 27.6
+               H24 C37.4 27.6 50.6 32.6 50.6 45.4 C50.6 56.3 40 63.3 25.5 63.3
+               H5.95 Z" />
+      </symbol>
+
+    </defs>
   </svg>
 
-
-  <!-- ══ HEADER ══ -->
-  <header class="mhead" id="top">
-    <div class="mhead__deco" aria-hidden="true">
-      <div class="mhead__photo-wrap">
-        <img class="mhead__photo" src="assets/header-cup.webp" data-alt-src="assets/header-frappe.webp" alt=""
-          loading="eager" width="1400" height="740">
-      </div>
-    </div>
-    <div class="mhead__bar">
-      <a class="mhead__back" href="../" aria-label="Back to the Beanery site">
-        <svg aria-hidden="true">
-          <use href="#i-back" />
-        </svg>
+  <!-- ═══════════════════════════════════════════════════════════
+     HEADER — cream ground, one gold hairline.
+     Nothing floats, nothing blurs.
+     ═══════════════════════════════════════════════════════════ -->
+  <header class="site-head">
+    <div class="wrap head-in">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="brand-logo" focusable="false">
+            <use href="#i-logo" />
+          </svg>
+        </span>
+        <span class="brand-name">
+          <span class="brand-word">Beanery</span>
+          <span class="brand-sub">Cafe</span>
+        </span>
       </a>
-      <div class="mhead__brand">
-        <svg class="mhead__b" aria-hidden="true">
-          <use href="#i-b" />
-        </svg>
-        <p>BEANERY<span>COFFEE &amp; MORE</span></p>
-      </div>
-      <span class="mhead__open">Open&nbsp;·&nbsp;8&ndash;23</span>
-    </div>
 
-    <div class="mhead__title">
-      <span class="mhead__kicker">The full lineup</span>
-      <h1>Menu</h1>
-      <p>Everything we pour, priced in Iraqi dinar.</p>
-    </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="#counter">Drinks</a>
+        <a href="#board">The board</a>
+        <a href="#visit">Visit</a>
+      </nav>
 
-    <div class="search">
-      <svg class="search__ico" aria-hidden="true">
-        <use href="#i-search" />
-      </svg>
-      <input id="q" type="search" inputmode="search" autocomplete="off"
-        placeholder="Search the menu — latte, matcha, cake…" aria-label="Search the menu">
-      <button id="clear" class="search__clear" type="button" hidden aria-label="Clear search">
-        <svg aria-hidden="true">
-          <use href="#i-x" />
-        </svg>
-      </button>
+      <a class="btn btn-solid btn-sm" href="menu/">Full menu</a>
     </div>
   </header>
 
-  <!-- ══ STICKY CATEGORY NAV ══ -->
-  <nav class="cats" id="cats" aria-label="Menu sections">
-    <div class="cats__track">
-      <a href="#espresso" class="cat is-on">Espresso</a>
-      <a href="#classic" class="cat">Classic</a>
-      <a href="#manual" class="cat">Manual brew</a>
-      <a href="#iced" class="cat">Iced</a>
-      <a href="#matcha" class="cat">Matcha</a>
-      <a href="#signature" class="cat">Signature</a>
-      <a href="#frappe" class="cat">Frappé</a>
-      <a href="#shakes" class="cat">Milkshakes</a>
-      <a href="#milk" class="cat">Signature milk</a>
-      <a href="#fresh" class="cat">Fresh</a>
-      <a href="#desserts" class="cat">Desserts</a>
-      <a href="#addons" class="cat">Add-ons</a>
-    </div>
-  </nav>
+  <main id="main">
 
-  <main id="menu">
+    <!-- ═══════════════════════════════════════════════════════════
+       HERO — one cream ground, organic green shapes, a floating cutout.
 
-    <p class="noresults" id="noresults" hidden>Nothing matches that. <button type="button" id="resetSearch">Clear the
-        search</button></p>
-
-    <section class="sec" id="espresso">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-espresso" />
-          </svg></span>
-        <h2>Espresso</h2>
-        <span class="sec__count">5</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/single-espresso.webp" alt="Espresso" loading="lazy"></div>
-            <h3 class="pcard__name">Espresso</h3>
-            <p class="pcard__price">1,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/double-espresso.webp" alt="Double Espresso" loading="lazy"></div>
-            <h3 class="pcard__name">Double Espresso</h3>
-            <p class="pcard__price">3,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/macchiato.webp" alt="Macchiato" loading="lazy"></div>
-            <h3 class="pcard__name">Macchiato</h3>
-            <p class="pcard__price">3,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cortado.webp" alt="Cortado" loading="lazy"></div>
-            <h3 class="pcard__name">Cortado</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/turkish-coffee.webp" alt="Turkish Coffee" loading="lazy"></div>
-            <h3 class="pcard__name">Turkish Coffee</h3>
-            <p class="pcard__price">1,500 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
-
-    <section class="sec" id="classic">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-mug" />
-          </svg></span>
-        <h2>Classic Coffee</h2>
-        <span class="sec__count">7</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cappuccino.webp" alt="Cappuccino" loading="lazy"></div>
-            <h3 class="pcard__name">Cappuccino</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/latte.webp" alt="Latte" loading="lazy"></div>
-            <h3 class="pcard__name">Latte</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/spanish-latte.webp" alt="Spanish Latte" loading="lazy"></div>
-            <h3 class="pcard__name">Spanish Latte</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/vanilla-latte.webp" alt="Vanilla Latte" loading="lazy"></div>
-            <h3 class="pcard__name">Vanilla Latte</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/caramel-latte.webp" alt="Caramel Latte" loading="lazy"></div>
-            <h3 class="pcard__name">Caramel Latte</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/mocha.webp" alt="Mocha" loading="lazy"></div>
-            <h3 class="pcard__name">Mocha</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/white-mocha.webp" alt="White Mocha" loading="lazy"></div>
-            <h3 class="pcard__name">White Mocha</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
-
-    <section class="sec" id="manual">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-brew" />
-          </svg></span>
-        <h2>Manual Brew</h2>
-        <span class="sec__count">3</span>
-      </header>
-      <p class="sec__note">Beans rotate. Ask what&rsquo;s on the grinder today.</p>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/brew.webp" alt="V60" loading="lazy"></div>
-            <h3 class="pcard__name">V60</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/brew.webp" alt="Chemex" loading="lazy"></div>
-            <h3 class="pcard__name">Chemex</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/amricano.webp" alt="Cold Brew" loading="lazy"></div>
-            <h3 class="pcard__name">Cold Brew</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
-
-    <section class="sec" id="iced">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-iced" />
-          </svg></span>
-        <h2>Iced Coffee</h2>
-        <span class="sec__count">4</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/amricano.webp" alt="Iced Americano" loading="lazy"></div>
-            <h3 class="pcard__name">Iced Americano</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/iced-latte.webp" alt="Iced Latte" loading="lazy"></div>
-            <h3 class="pcard__name">Iced Latte</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/iced-spanish-latte.webp" alt="Iced Spanish Latte" loading="lazy">
-            </div>
-            <h3 class="pcard__name">Iced Spanish Latte</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/iced-caramel-latte.webp" alt="Iced Caramel Latte" loading="lazy">
-            </div>
-            <h3 class="pcard__name">Iced Caramel Latte</h3>
-            <p class="pcard__price">4,500 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
-
-    <section class="sec" id="matcha">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-matcha" />
-          </svg></span>
-        <h2>Matcha</h2>
-        <span class="sec__count">6</span>
-      </header>
-      <p class="sec__note">Whisked to order. Hot or iced, same price.</p>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/matcha.webp" alt="Classic Matcha" loading="lazy"></div>
-            <h3 class="pcard__name">Classic Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/matcha.webp" alt="Iced Matcha" loading="lazy"></div>
-            <h3 class="pcard__name">Iced Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/matcha-vanilla.webp" alt="Vanilla Matcha" loading="lazy"></div>
-            <h3 class="pcard__name">Vanilla Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/match-strawberry.webp" alt="Strawberry Matcha" loading="lazy">
-            </div>
-            <h3 class="pcard__name">Strawberry Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/matcha-coconut.webp" alt="Coconut Matcha" loading="lazy"></div>
-            <h3 class="pcard__name">Coconut Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/matcha-ube.webp" alt="Ube Matcha" loading="lazy"></div>
-            <h3 class="pcard__name">Ube Matcha</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
-
-    <!-- signature: the one thing that gets full billing -->
-    <section class="sec sec--feature" id="signature">
-      <svg class="sec--feature__mark" aria-hidden="true" focusable="false">
+       The old hero was two colour blocks meeting on a hard vertical
+       seam, because images/hero.png was a rectangular photo carrying
+       its own olive ground. hero-3.png is a cutout with the
+       green shape baked in, so there is no second ground to reconcile
+       and no seam to hide — the drink sits on the cream directly and
+       the page's own blobs run underneath it.
+       ═══════════════════════════════════════════════════════════ -->
+    <section class="hero">
+      <!-- Decorative only. aria-hidden, pointer-events:none, and every one
+         of them is positioned so it can never sit under running text. -->
+      <svg class="deco deco-bean-a" aria-hidden="true" focusable="false">
         <use href="#i-bean" />
       </svg>
-      <header class="sec__head">
-        <span class="sec__icon sec__icon--gold"><svg focusable="false">
-            <use href="#i-cat-star" />
-          </svg></span>
-        <h2>Cold Foam Signatures</h2>
-        <span class="sec__count">5</span>
-      </header>
-      <p class="sec__note sec__note--ar">
-        <bdi lang="ar" dir="rtl">مشروب كامل مع الـ Cold Foam</bdi>
-      </p>
-      <p class="feature__price">Any flavour <b>6,000</b></p>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cfs-saffron.webp" alt="Saffron" loading="lazy"></div>
-            <h3 class="pcard__name">Saffron</h3>
-            <p class="pcard__desc">Steeped saffron milk, one thread on top</p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cfs-pistachio.webp" alt="Pistachio" loading="lazy"></div>
-            <h3 class="pcard__name">Pistachio</h3>
-            <p class="pcard__desc">Roasted pistachio, salted foam</p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cfs-ube.webp" alt="Ube" loading="lazy"></div>
-            <h3 class="pcard__name">Ube</h3>
-            <p class="pcard__desc">Purple yam, coconut edge</p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cfs-vanilla.webp" alt="Vanilla Sweet Cream" loading="lazy"></div>
-            <h3 class="pcard__name">Vanilla Sweet Cream</h3>
-            <p class="pcard__desc">Real vanilla, heavy cream</p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cfs-ciminin.webp" alt="Brown Sugar Cinnamon" loading="lazy"></div>
-            <h3 class="pcard__name">Brown Sugar Cinnamon</h3>
-            <p class="pcard__desc">Dark sugar syrup, cinnamon dust</p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
+      <svg class="deco deco-bean-b" aria-hidden="true" focusable="false">
+        <use href="#i-bean" />
+      </svg>
+      <svg class="deco deco-spark-a" aria-hidden="true" focusable="false">
+        <use href="#i-spark" />
+      </svg>
+      <span class="blob blob-hero" aria-hidden="true"></span>
+
+      <!-- The headline sits BESIDE the photograph; everything that
+         supports it sits UNDERNEATH both. Splitting the old single
+         .hero-type into these two blocks is what lets the grid do that
+         — see the grid-template-areas in styles.css. -->
+      <div class="hero-head">
+
+        <h1 class="hero-h1 reveal">
+          A flavor that<br>
+          <em class="hero-em">lifts your mood.<svg class="deco deco-under" viewBox="0 0 180 18"
+              preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path d="M3 12c14-11 27 5 41-4s27 9 41-1 27 8 41-1 12 0 12 0" />
+            </svg></em>
+        </h1>
+
+        <!-- The Arabic half of the slogan, not a translation caption: it is
+           the line the shop actually uses. lang + dir are required or the
+           bidi algorithm mirrors the punctuation and the font stack falls
+           through to a system face. See .slogan-ar in styles.css. -->
+        <p class="slogan-ar reveal" lang="ar" dir="rtl">نكهة تِعدل المزاج</p>
+
+        <p class="every"><span class="every-rule" aria-hidden="true"></span>Every day &middot; 7 am &ndash; 12 am</p>
+      </div>
+
+      <div class="hero-sub">
+        <!-- The catchphrase, sitting directly under the tagline where it
+           gets read. It was below the buttons, which is the lowest
+           attention point in the hero.
+
+           It also explains the dollar bill in the hero photograph,
+           which was otherwise the one prop on the page with no reason
+           to be in frame. The maths is spelled out in #dollar.
+
+           "about" is load-bearing — 1,500 IQD is roughly $1.05-$1.15
+           and the rate drifts. Do not tighten it to "costs a dollar". -->
+        <p class="hero-kicker">
+          <span class="kicker-coin" aria-hidden="true">
+            <span class="kicker-coin-face">$1</span>
+          </span>
+          <span class="kicker-text">
+            Espresso still costs <em>about&nbsp;a&nbsp;dollar</em>
+          </span>
+        </p>
+
+        <p class="lede reveal">
+          Beans we pick ourselves, drinks pulled and whisked to order, and a
+          corner worth sitting in once you have one.
+        </p>
+
+        <p class="hero-cta">
+          <a class="btn btn-solid" href="#counter">See the drinks</a>
+          <a class="btn btn-line" href="menu/">Open the full menu</a>
+        </p>
+
+        <p class="hero-where">Ankawa &middot; Erbil</p>
+      </div>
+
+      <div class="hero-shot">
+        <!-- Rotating seal, straddling the colour seam. It carries the
+           tagline, so it is decoration that also says something. -->
+        <svg class="seal" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <defs>
+            <path id="seal-arc" d="M100 100 m-70 0 a70 70 0 1 1 140 0 a70 70 0 1 1 -140 0" />
+          </defs>
+          <circle class="seal-ring" cx="100" cy="100" r="92" />
+          <circle class="seal-ring seal-ring-in" cx="100" cy="100" r="48" />
+          <text class="seal-text">
+            <textPath href="#seal-arc" startOffset="0">
+              A FLAVOR THAT LIFTS YOUR MOOD &#183;
+            </textPath>
+          </text>
+          <use class="seal-bean" href="#i-bean" x="76" y="85" width="48" height="33" />
+        </svg>
+
+        <!-- A TRANSPARENT cutout carrying its own green blob, splash and
+           scattered beans. There is no panel behind it and no
+           object-fit crop — it floats on the cream directly, which is
+           what makes the blob read as part of the page rather than as a
+           photo in a box.
+
+           WHY "-trim": the supplied hero-3.png is 1672x941 but 27.2% of
+           its width is dead space on the left and 17.0% on the right —
+           nearly half the file is nothing. Beside the headline that
+           padding became a large unexplained gap that no amount of
+           column tuning could close, because the gap was inside the
+           image. This is cropped to the artwork's bounding box
+           (934x747), so it now sits tight to its own edges.
+
+           hero-3.png also arrived FLATTENED ON BLACK, unlike hero-1/2
+           which had real alpha. The trim keys that matte out: alpha
+           ramps over max-channel luma 16..64, but only across the black
+           region connected to the frame edge, so the dark coffee and
+           the beans inside the artwork stay opaque; the keyed rim is
+           then un-premultiplied (fg = px / alpha) so no black fringe
+           survives on cream. If you re-export the art, prefer a real
+           transparent PNG — the key is a rescue, not a pipeline.
+
+           The untrimmed originals are kept as hero-1/2/3.png. Regenerate
+           a trim by cropping to the alpha bbox — do not hand-crop, or the
+           framing drifts between png and webp and the <picture> fallback
+           will jump.
+
+           Swap to hero-2-trim.* for the iced splash version (923x762),
+           or hero-1-trim.* for the calmer one (966x729); update
+           width/height to match. -->
+
+          <img class="hero-img" src="images/hero-3-trim.webp" width="934" height="747" fetchpriority="high"
+            decoding="async"
+            alt="A glass cup of Beanery espresso with the leaf-B mark on it, coffee beans and droplets scattered around, on a soft green organic backdrop.">
       </div>
     </section>
 
-    <section class="sec" id="frappe">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-frappe" />
-          </svg></span>
-        <h2>Frappé</h2>
-        <span class="sec__count">2</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/frappe-hazelnut.webp" alt="Hazelnut Frappé" loading="lazy"></div>
-            <h3 class="pcard__name">Hazelnut Frappé</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/frappe-carmel.webp" alt="Caramel Frappé" loading="lazy"></div>
-            <h3 class="pcard__name">Caramel Frappé</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
 
-    <section class="sec" id="shakes">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-shake" />
-          </svg></span>
-        <h2>Milkshakes</h2>
-        <span class="sec__count">3</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/chocolate-milkshake.webp" alt="Chocolate Milkshake"
-                loading="lazy"></div>
-            <h3 class="pcard__name">Chocolate Milkshake</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/pistachio-milkshake.webp" alt="Pistachio Milkshake"
-                loading="lazy"></div>
-            <h3 class="pcard__name">Pistachio Milkshake</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/vanilla-milkshake.webp" alt="Vanilla Milkshake" loading="lazy">
+    <!-- ═══════════════════════════════════════════════════════════
+       ON THE COUNTER — filter chips over the card deck.
+
+       Five cards on a turntable. Only three are ever visible: the one
+       in front and one peeking each side. Everything further round is
+       parked at opacity 0. Swipe, drag, arrows, dots and the keyboard
+       all drive the same goTo().
+
+       The signature is the one green card — that is what marks it as
+       featured, so it carries no "featured" label.
+
+       IMAGE HONESTY: all five are now real product photographs. The
+       saffron and ube-matcha illustrated stand-ins have been replaced
+       with cutouts from the menu's asset set, so .dcard__shot--illo is
+       no longer used by any card.
+       ═══════════════════════════════════════════════════════════ -->
+    <section class="counter" id="counter">
+      <svg class="blobfill blob-counter-a" aria-hidden="true" focusable="false">
+        <use href="#i-blob" />
+      </svg>
+      <svg class="blobfill blob-counter-b" aria-hidden="true" focusable="false">
+        <use href="#i-blob" />
+      </svg>
+      <svg class="deco deco-steam-a" aria-hidden="true" focusable="false">
+        <use href="#i-steam" />
+      </svg>
+      <svg class="deco deco-drops-a" aria-hidden="true" focusable="false">
+        <use href="#i-drops" />
+      </svg>
+      <svg class="deco deco-swirl-a" aria-hidden="true" focusable="false">
+        <use href="#i-swirl" />
+      </svg>
+
+      <div class="wrap counter-head">
+        <div>
+          <p class="label">On the counter</p>
+          <h2 class="reveal">The ones people<br>come back for.</h2>
+        </div>
+        <div class="counter-side">
+          <p class="lede reveal">
+            Seven of forty&#8209;six. The rest hang on the board — open it any time.
+          </p>
+          <!-- No arrows here. They live on the deck itself (#spinPrev /
+               #spinNext, either side of .stage) where they are next to
+               the thing they move. An earlier pair up here were left
+               over from the horizontal rail this deck replaced and were
+               wired to nothing. -->
+        </div>
+      </div>
+
+
+
+      <!-- ═══════════════════════════════════════════════════════════
+         THE DECK — one card in front, one peeking each side.
+
+         Three slots only: centre, left, right. Anything further out is
+         PARKED at opacity 0 in script.js. Five cards still live in the
+         markup and still rotate through — the deck just never shows
+         more than three at once.
+
+         With JavaScript off, .deck has no `is-live` class and the CSS
+         falls back to a plain stacked-then-wrapped layout, so all five
+         drinks are still readable.
+         ═══════════════════════════════════════════════════════════ -->
+      <div class="stage">
+        <button class="deckbtn deckbtn--prev" type="button" id="spinPrev" aria-label="Previous drink">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M15 5l-7 7 7 7" />
+          </svg>
+        </button>
+
+        <div class="deck" id="deck" data-start="2">
+
+          <article class="dcard" style="--tint:#F3EADC;--tint-2:#E7DAC4" data-cat="coffee">
+            <span class="dcard__tag">Iced coffee</span>
+            <figure class="dcard__shot">
+                <img src="images/amricano.webp" width="243" height="339" loading="lazy" decoding="async"
+                  alt="Iced americano in a clear Beanery cup, dark coffee over ice.">
+            </figure>
+            <div class="dcard__body">
+              <p class="dcard__name">Iced<br>Americano</p>
+              <p class="dcard__desc">Two shots, cold water, a lot of ice.</p>
             </div>
-            <h3 class="pcard__name">Vanilla Milkshake</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
+            <div class="dcard__foot">
+              <p class="dcard__price">4,000<i>IQD</i></p>
+            </div>
           </article>
+
+          <article class="dcard" style="--tint:#F6E7D2;--tint-2:#EED8B6" data-cat="coffee">
+            <span class="dcard__tag">Frappé</span>
+            <figure class="dcard__shot">
+                <img src="images/frappe.webp" width="212" height="379" loading="lazy" decoding="async"
+                  alt="Caramel frappé in a Beanery cup, topped with cream and chocolate sauce.">
+            </figure>
+            <div class="dcard__body">
+              <p class="dcard__name">Caramel<br>Frappé</p>
+              <p class="dcard__desc">Blended caramel and coffee. Cream on top, sauce over that.</p>
+            </div>
+            <div class="dcard__foot">
+              <p class="dcard__price">5,000<i>IQD</i></p>
+            </div>
+          </article>
+
+          <!-- The signature. The one green card — that is what marks it as
+             featured, so it needs no "featured" label. -->
+          <article class="dcard dcard--green" data-cat="signature">
+            <span class="dcard__tag dcard__tag--gold">Signature</span>
+            <figure class="dcard__shot">
+                <img src="images/saffron-cold-foam.webp" width="437" height="576" loading="lazy" decoding="async"
+                  alt="Cold foam saffron milk in a clear Beanery cup, saffron threads across the pale gold foam.">
+            </figure>
+            <div class="dcard__body">
+              <p class="dcard__name">Cold Foam<br>Saffron Milk</p>
+              <p class="dcard__desc">Saffron steeped into the milk, salted cold foam poured over.</p>
+            </div>
+            <div class="dcard__foot">
+              <p class="dcard__price">6,000<i>IQD</i></p>
+            </div>
+          </article>
+
+          <article class="dcard" style="--tint:#E6EFDD;--tint-2:#D2E3C4" data-cat="matcha noncoffee">
+            <span class="dcard__tag">Matcha</span>
+            <figure class="dcard__shot">
+                <img src="images/matcha.webp" width="233" height="325" loading="lazy" decoding="async"
+                  alt="Iced matcha in a clear Beanery cup, bright green over ice.">
+            </figure>
+            <div class="dcard__body">
+              <p class="dcard__name">Iced<br>Matcha</p>
+              <p class="dcard__desc">Whisked to order, never pre&#8209;mixed. Grassy and clean.</p>
+            </div>
+            <div class="dcard__foot">
+              <p class="dcard__price">6,000<i>IQD</i></p>
+            </div>
+          </article>
+
+          <article class="dcard" style="--tint:#EDE6F6;--tint-2:#DDD2EE" data-cat="signature matcha noncoffee">
+            <span class="dcard__tag dcard__tag--purple">Non&#8209;coffee</span>
+            <figure class="dcard__shot">
+                <img src="images/ube-matcha.webp" width="439" height="576" loading="lazy" decoding="async"
+                  alt="Ube matcha in a clear Beanery cup, green matcha layered over purple ube.">
+            </figure>
+            <div class="dcard__body">
+              <p class="dcard__name">Ube<br>Matcha</p>
+              <p class="dcard__desc">Purple yam against matcha, coconut on the finish.</p>
+            </div>
+            <div class="dcard__foot">
+              <p class="dcard__price">6,000<i>IQD</i></p>
+            </div>
+          </article>
+
         </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
+
+        <button class="deckbtn deckbtn--next" type="button" id="spinNext" aria-label="Next drink">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="dots" id="dots" aria-hidden="true"></div>
+
+    </section>
+
+
+
+    <!-- ═══════════════════════════════════════════════════════════
+       THE DOLLAR — the one colour block between hero and footer.
+
+       Everything from the hero down to the visit block sits on cream,
+       so the page had no beat in the middle. This is deep green with
+       the supplied noise texture over it, which gives the scroll a
+       breath and finally gives the $1 bill in the hero photograph a
+       reason to be in frame.
+
+       HONESTY, because this section is a factual claim:
+       * 1,500 IQD is the real "from" price for espresso on the board
+         (5 espressos, cheapest 1,500) — the same number used in the
+         board index below. If the board changes, change both.
+       * 1,500 IQD is roughly $1.05-$1.15, NOT exactly a dollar, and
+         the rate drifts. So the copy says "about", the operator is an
+         explicit ≈, and the note underneath says the rate moves. Do
+         not tighten this to "= $1" — it would be wrong on most days.
+
+       The visual equation is aria-hidden and a plain-language
+       sentence is read instead; "1,500 IQD ≈ $1 = one espresso"
+       announced term by term is not a sentence.
+       ═══════════════════════════════════════════════════════════ -->
+    <section class="dollar" id="dollar">
+      <svg class="blobfill blob-dollar" aria-hidden="true" focusable="false">
+        <use href="#i-blob" />
+      </svg>
+      <svg class="deco deco-bean-e" aria-hidden="true" focusable="false">
+        <use href="#i-bean" />
+      </svg>
+      <svg class="deco deco-spark-d" aria-hidden="true" focusable="false">
+        <use href="#i-spark" />
+      </svg>
+
+      <div class="wrap dollar-in">
+        <div class="dollar-type">
+          <p class="label label-gold">The maths</p>
+          <h2 class="reveal on-green">What a dollar<br>still buys.</h2>
+          <p class="dollar-note">
+            Five espressos on the board, from 1,500&nbsp;IQD. The exchange rate
+            wanders about; the espresso is the same either way.
+          </p>
+        </div>
+
+        <p class="sr-only">
+          One thousand five hundred Iraqi dinar is about one US dollar,
+          which buys one espresso.
+        </p>
+
+        <div class="equation" aria-hidden="true">
+          <div class="eq-term">
+            <span class="eq-value">1,500</span>
+            <span class="eq-unit">IQD</span>
+          </div>
+
+          <span class="eq-op">&asymp;</span>
+
+          <div class="eq-term">
+            <span class="eq-value">$1</span>
+            <span class="eq-unit">give or take</span>
+          </div>
+
+          <span class="eq-op">=</span>
+
+          <div class="eq-term eq-term--last">
+            <svg class="eq-cup" aria-hidden="true" focusable="false">
+              <use href="#i-cup" />
+            </svg>
+            <span class="eq-value">One espresso</span>
+            <span class="eq-unit">pulled to order</span>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <section class="sec" id="milk">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-drop" />
-          </svg></span>
-        <h2>Signature Milk</h2>
-        <span class="sec__count">3</span>
-      </header>
-      <p class="sec__note">No coffee. Served cold.</p>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/sm-saffron.webp" alt="Saffron Milk" loading="lazy"></div>
-            <h3 class="pcard__name">Saffron Milk</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/sm-ube.webp" alt="Ube Milk" loading="lazy"></div>
-            <h3 class="pcard__name">Ube Milk</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/sm-blacksesame.webp" alt="Black Sesame Milk" loading="lazy"></div>
-            <h3 class="pcard__name">Black Sesame Milk</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       THE BOARD
+
+       Counted off the printed board photographed in brand-info/.
+       Breadth is carried typographically because photographs for
+       46 drinks do not exist. Counts and "from" prices are real —
+       if the board changes, these change with it.
+       ═══════════════════════════════════════════════════════════ -->
+    <section class="board" id="board">
+      <svg class="deco deco-cup" aria-hidden="true" focusable="false">
+        <use href="#i-cup" />
+      </svg>
+      <svg class="deco deco-wave" aria-hidden="true" focusable="false">
+        <use href="#i-wave" />
+      </svg>
+
+      <div class="wrap">
+        <div class="board-head">
+          <div>
+            <p class="label">The full board</p>
+            <h2 class="reveal">Forty&#8209;six drinks.<br>Eight desserts.</h2>
+          </div>
+          <p class="lede reveal">
+            The whole board hangs above the counter. Same list, same prices,
+            nothing hidden behind a menu you have to ask for.
+          </p>
         </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
+
+        <ul class="index" role="list">
+          <li><span class="ix-name">Espresso</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">5</span><span class="ix-p">from 1,500</span></li>
+          <li><span class="ix-name">Classic coffee</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">7</span><span class="ix-p">from 4,000</span></li>
+          <li><span class="ix-name">Manual brew</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">3</span><span class="ix-p">from 4,000</span></li>
+          <li><span class="ix-name">Iced coffee</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">4</span><span class="ix-p">from 4,000</span></li>
+          <li><span class="ix-name">Matcha</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">6</span><span class="ix-p">6,000</span></li>
+          <li><span class="ix-name">Frappé</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">2</span><span class="ix-p">5,000</span></li>
+          <li class="ix-star"><span class="ix-name">Cold foam signatures</span><span class="ix-dots"
+              aria-hidden="true"></span><span class="ix-n">5</span><span class="ix-p">6,000</span></li>
+          <li><span class="ix-name">Signature milks</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">3</span><span class="ix-p">6,000</span></li>
+          <li><span class="ix-name">Milkshakes</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">3</span><span class="ix-p">5,000</span></li>
+          <li><span class="ix-name">Fresh &amp; refreshing</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">8</span><span class="ix-p">5,000</span></li>
+          <li><span class="ix-name">Desserts</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">8</span><span class="ix-p">from 1,500</span></li>
+          <li><span class="ix-name">Add&#8209;ons</span><span class="ix-dots" aria-hidden="true"></span><span
+              class="ix-n">5</span><span class="ix-p">1,500</span></li>
+        </ul>
+
+        <p class="board-cta">
+          <svg class="deco deco-arrow" aria-hidden="true" focusable="false">
+            <use href="#i-arrow" />
+          </svg>
+          <a class="btn btn-solid" href="menu/">Open the full menu</a>
+          <span class="board-note">Prices in Iraqi dinar. The board changes with the season.</span>
+        </p>
       </div>
     </section>
 
-    <section class="sec" id="fresh">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-citrus" />
-          </svg></span>
-        <h2>Fresh &amp; Refreshing</h2>
-        <span class="sec__count">8</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/passion-fruit-iced-tea.webp" alt="Passion Fruit Lemonade"
-                loading="lazy"></div>
-            <h3 class="pcard__name">Passion Fruit Lemonade</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/strawberry-lemonade.webp" alt="Strawberry Lemonade"
-                loading="lazy"></div>
-            <h3 class="pcard__name">Strawberry Lemonade</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/peach-iced-tea.webp" alt="Peach Iced Tea" loading="lazy"></div>
-            <h3 class="pcard__name">Peach Iced Tea</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/icetea-passionfruit.webp" alt="Passion Fruit Iced Tea"
-                loading="lazy"></div>
-            <h3 class="pcard__name">Passion Fruit Iced Tea</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/mojito.webp" alt="Classic Mojito" loading="lazy"></div>
-            <h3 class="pcard__name">Classic Mojito</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/berry-mojito.webp" alt="Berry Mojito" loading="lazy"></div>
-            <h3 class="pcard__name">Berry Mojito</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/orange-juice.webp" alt="Fresh Orange Juice" loading="lazy"></div>
-            <h3 class="pcard__name">Fresh Orange Juice</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/golden-lemon.webp" alt="Golden Lemon" loading="lazy"></div>
-            <h3 class="pcard__name">Golden Lemon <b class="new">New</b></h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
+    <!-- ═══════════════════════════════════════════════════════════
+       VISIT — the reference's closing block: a soft-masked map on one
+       side, the address and an OPEN DAILY pill on the other.
 
-    <section class="sec" id="desserts">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-cake" />
-          </svg></span>
-        <h2>Desserts</h2>
-        <span class="sec__count">8</span>
-      </header>
-      <div class="cardrow">
-        <button class="cardrow__arrow cardrow__arrow--prev" type="button" aria-label="Scroll left"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-        <div class="cardrow__track">
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cheesecake.webp" alt="Cheesecake" loading="lazy"></div>
-            <h3 class="pcard__name">Cheesecake</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/chocolate-cake.webp" alt="Chocolate Cake" loading="lazy"></div>
-            <h3 class="pcard__name">Chocolate Cake</h3>
-            <p class="pcard__price">6,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/brownie.webp" alt="Brownie" loading="lazy"></div>
-            <h3 class="pcard__name">Brownie</h3>
-            <p class="pcard__price">4,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/cookies.webp" alt="Cookies" loading="lazy"></div>
-            <h3 class="pcard__name">Cookies</h3>
-            <p class="pcard__price">3,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/croissant.webp" alt="Croissant" loading="lazy"></div>
-            <h3 class="pcard__name">Croissant</h3>
-            <p class="pcard__price">3,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/tiramisu.webp" alt="Tiramisu" loading="lazy"></div>
-            <h3 class="pcard__name">Tiramisu</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/trilece.webp" alt="Trileçe" loading="lazy"></div>
-            <h3 class="pcard__name">Trileçe</h3>
-            <p class="pcard__price">5,000 <span>IQD</span></p>
-          </article>
-          <article class="pcard">
-            <div class="pcard__photo"><img src="assets/ice-cream-scoop.webp" alt="Ice Cream Scoop" loading="lazy"></div>
-            <h3 class="pcard__name">Ice Cream Scoop</h3>
-            <p class="pcard__price">1,500 <span>IQD</span></p>
-          </article>
-        </div>
-        <button class="cardrow__arrow cardrow__arrow--next" type="button" aria-label="Scroll right"><svg
-            focusable="false">
-            <use href="#i-chev" />
-          </svg></button>
-      </div>
-    </section>
+       It moved off the charcoal ground and onto cream. The charcoal
+       was the colour of the real walls, but the reference closes on
+       light, and a dark band here cut the page in half right where it
+       should be opening out.
 
-    <section class="sec sec--addons" id="addons">
-      <header class="sec__head">
-        <span class="sec__icon"><svg focusable="false">
-            <use href="#i-cat-plus" />
-          </svg></span>
-        <h2>Add-ons</h2>
-        <span class="sec__count">5</span>
-      </header>
-      <p class="sec__note">Add to any drink.</p>
-      <ul class="list list--addons">
-        <li class="item"><span class="item__name">Extra Espresso Shot</span><span class="item__dots"
-            aria-hidden="true"></span><span class="item__price">1,500</span></li>
-        <li class="item"><span class="item__name">Extra Milk</span><span class="item__dots"
-            aria-hidden="true"></span><span class="item__price">1,500</span></li>
-        <li class="item"><span class="item__name">Flavor Syrup</span><span class="item__dots"
-            aria-hidden="true"></span><span class="item__price">1,500</span></li>
-        <li class="item"><span class="item__name">Cold Foam</span><span class="item__dots"
-            aria-hidden="true"></span><span class="item__price">1,500</span></li>
-        <li class="item"><span class="item__name">Ice Cream Scoop</span><span class="item__dots"
-            aria-hidden="true"></span><span class="item__price">1,500</span></li>
-      </ul>
+       ⚠ THE MAP PIN IS NOT BEANERY. The embed supplied points at
+       "Abu-Ghazaleh Intellectual Property (AGIP)" in Erbil. It is in
+       the right city and it renders, but it is somebody else's
+       building — swap the `pb=` payload for Beanery's own place before
+       this goes live, or the map will confidently send people to the
+       wrong door. The street address below is still a TODO for the
+       same reason: it is marked, not invented.
+       ═══════════════════════════════════════════════════════════ -->
+    <section class="visit" id="visit">
+      <svg class="blobfill blob-visit" aria-hidden="true" focusable="false">
+        <use href="#i-logo-solid" />
+      </svg>
+      <svg class="deco deco-steam-b" aria-hidden="true" focusable="false">
+        <use href="#i-steam" />
+      </svg>
+      <svg class="deco deco-swirl-b" aria-hidden="true" focusable="false">
+        <use href="#i-swirl" />
+      </svg>
+
+      <div class="wrap visit-in">
+
+        <!-- The map, in the same lobed mask the blobs use, so it reads as
+           part of the shape language rather than as a pasted widget.
+           title= is required: an untitled iframe is an unlabelled frame
+           to a screen reader. -->
+        <div class="visit-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3218.057197671199!2d44.0099771!3d36.2381045!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40071faa78c0b97d%3A0xf90fe5e35a1b08e6!2sThe%20Beanery%20Cafe!5e0!3m2!1sen!2siq!4v1787581877529!5m2!1sen!2siq"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+
+        <div class="visit-type">
+          <p class="label label-gold">Visit</p>
+          <h2 class="reveal">Come sit<br>a while.</h2>
+          <p class="lede reveal">
+            Marble tables, green benches, and enough room to stay past your cup.
+          </p>
+
+          <p class="visit-name">Beanery Cafe</p>
+          <p class="visit-name-ar" lang="ar" dir="rtl">بينيري كافيه</p>
+          <p class="visit-addr">
+            <span class="todo">Add the street address</span><br>
+            Ankawa, Erbil, Iraq
+          </p>
+
+          <p class="openpill">
+            <span class="openpill-tag">Open daily</span>
+            <span class="openpill-hrs">7 am &ndash; 12 am</span>
+          </p>
+
+          <dl class="facts">
+            <div class="fact">
+              <dt>Phone</dt>
+              <dd><span class="todo">Add the number</span></dd>
+            </div>
+            <div class="fact">
+              <dt>Instagram</dt>
+              <dd><a href="https://instagram.com/beanery">@beanery</a></dd>
+            </div>
+            <div class="fact">
+              <dt>Wifi</dt>
+              <dd>Free &mdash; ask at the counter</dd>
+            </div>
+          </dl>
+
+          <p class="visit-cta">
+            <a class="btn btn-solid" href="https://maps.google.com/?q=Ankawa,+Erbil,+Iraq">
+              Get directions
+              <span class="btn-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 17L17 7M9 7h8v8" />
+                </svg>
+              </span>
+            </a>
+          </p>
+        </div>
+
+      </div>
     </section>
 
   </main>
 
-  <footer class="mfoot">
-    <div class="mfoot__inner">
-      <div class="mfoot__brand">
-        <p class="mfoot__script">Good coffee, good mood.</p>
-        <p class="mfoot__sub">EVERY DAY.</p>
+
+  <footer class="site-foot">
+    <svg class="deco deco-bean-d" aria-hidden="true" focusable="false">
+      <use href="#i-bean" />
+    </svg>
+    <svg class="deco deco-drops-b" aria-hidden="true" focusable="false">
+      <use href="#i-drops" />
+    </svg>
+
+    <div class="wrap foot-in">
+      <div class="foot-brand">
+        <p class="foot-tag">A flavor that<br>lifts your mood.</p>
+        <p class="foot-tag-ar" lang="ar" dir="rtl">بينيري كافيه — نكهة تِعدل المزاج</p>
+        <p class="foot-every"><span class="every-rule" aria-hidden="true"></span>Every day &middot; 7 am &ndash; 12 am</p>
       </div>
-      <div class="mfoot__aside">
-        <svg class="mfoot__bean" aria-hidden="true" focusable="false">
-          <use href="#i-bean" />
-        </svg>
-        <p class="mfoot__note">
-          Prices in Iraqi dinar. Please tell your barista about any allergies before ordering.
-          Menu changes with the season.
-        </p>
-        <a class="mfoot__link" href="../">Back to beanery.com</a>
-      </div>
+
+      <nav class="foot-nav" aria-label="Footer">
+        <div>
+          <h2>Menu</h2>
+          <a href="menu/">Full menu</a>
+          <a href="#counter">What people order</a>
+          <a href="#board">The board</a>
+        </div>
+        <div>
+          <h2>Visit</h2>
+          <a href="#visit">Find us</a>
+          <a href="#visit">Hours</a>
+          <a href="https://instagram.com/beanery">Instagram</a>
+        </div>
+      </nav>
     </div>
-    <p class="mfoot__credit">
-      Made by <a href="https://base60labs.com" target="_blank" rel="noopener noreferrer">base60labs.com</a>
-    </p>
-    <div class="mfoot__drips" aria-hidden="true">
-      <svg class="mfoot__drop mfoot__drop--a" focusable="false">
-        <use href="#i-drop" />
-      </svg>
-      <svg class="mfoot__drop mfoot__drop--b" focusable="false">
-        <use href="#i-drop" />
-      </svg>
+
+    <div class="wrap foot-fine">
+      <p>&copy; <span id="year">2026</span> Beanery Cafe &middot; Ankawa, Erbil</p>
+      <p>Prices in Iraqi dinar.</p>
     </div>
   </footer>
 
-  <button class="totop" id="totop" type="button" hidden aria-label="Back to top">
-    <svg aria-hidden="true">
-      <use href="#i-up" />
-    </svg>
-  </button>
-
-  <script src="menu.js?v=6"></script>
+  <script src="script.js?v=4" defer></script>
 </body>
 
 </html>
